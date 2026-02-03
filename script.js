@@ -705,7 +705,7 @@ function initGame3() {
             avatar: "assets/characters/boy_avatar.png",
             dialogue: "呀，其他国潮都不在，可以我们俩一起玩吗？",
             options: [
-                { text: "哎呀，我还有事，先不玩了。", affectionChange: -15, nextNodeId: "node32" },
+                { text: "哎呀，我还有事，先不玩了。", affectionChange: -15, nextNodeId: "node5" },
                 { text: "好呀好呀，玩那个新模式吗，2V2的，我昨天和我诡秘输了一晚上！你能带我赢吗", affectionChange: +15, nextNodeId: "node31" }
             ]
         },
@@ -799,8 +799,37 @@ function initGame3() {
             dialogue: "嗯，好，等我打完这把就来",
             options: [
                 { text: "没事没事，我等你和他们打完也可以的", affectionChange: +12, nextNodeId: "node5111" },
-                { text: "好~等你哟", affectionChange: +12, nextNodeId: "node5111" },
-                { text: "好久啊，我自己开把排位吧，待会你出来等我（以前的你百分百这么干，呵呵）", affectionChange: -5, nextNodeId: "node5112" }
+                { text: "好~等你哟（偷偷观战）", affectionChange: +12, nextNodeId: "node5112" },
+                { text: "好久啊，我自己开把排位吧，待会让他出来等我（以前的你百分百这么干，呵呵）", affectionChange: -15, nextNodeId: "node114514" }
+            ]
+        },
+        {
+            id: "node5111",
+            avatar: "assets/characters/boy_avatar.png",
+            dialogue: "神也想吃国潮如约而至，直接跳下五人车队",
+            options: [
+                { text: "哇塞哇塞他直接跳车了欸哇塞", affectionChange: +12, nextNodeId: "node6" },
+                { text: "切，装货，见色忘友的家伙，对兄弟都这样那对女朋友呢", affectionChange: +1, nextNodeId: "node6" }
+            ]
+        },
+        {
+            id: "node5112",
+            avatar: "assets/characters/boy_avatar.png",
+            dialogue: "神也想吃国潮玩老夫子在高地越了七八个",
+            options: [
+                { text: "等他出来夸他好厉害", affectionChange: +12, nextNodeId: "node6" },
+                { text: "老夫子丑死了，怎么爱玩这鸟英雄，还是镜澜帅", affectionChange: -5, nextNodeId: "node6" },
+                { text: "继续保持高冷女神风格，只言片语", affectionChange: +1, nextNodeId: "node6" }
+            ]
+        },
+        {
+            id: "node4",
+            avatar: "assets/characters/boy_avatar.png",
+            dialogue: "终于，2V2出现了一对闻风丧胆的中辅，他们",
+            options: [
+                { text: "等他出来夸他好厉害", affectionChange: +12, nextNodeId: "node6" },
+                { text: "老夫子丑死了，怎么爱玩这鸟英雄，还是镜澜帅", affectionChange: -5, nextNodeId: "node6" },
+                { text: "继续保持高冷女神风格，只言片语", affectionChange: +1, nextNodeId: "node6" }
             ]
         },
         // 最终结局节点（唯一）
