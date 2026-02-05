@@ -301,8 +301,8 @@ body {
     box-shadow: 0 6px 16px rgba(255, 71, 87, 0.5);
 }
 
-/* 游戏1：爱心收集容器（优化背景，提升氛围感） */
-.heart-container {
+/* 游戏1：图片容器 */
+.image-container {
     width: 90%;
     max-width: 800px;
     height: 60vh;
@@ -317,31 +317,59 @@ body {
     }
 }
 
-/* 爱心样式（放大尺寸，优化点击区域，提升灵敏性） */
-.heart {
+/* 图片样式（带爱心边框） */
+.game-image {
     position: absolute;
-    width: 50px; /* 从30px放大到50px，提升可视性和点击区域 */
-    height: 50px;
-    background: url("assets/game/heart.png") no-repeat center center;
-    background-size: contain;
+    width: 80px;
+    height: 80px;
     cursor: pointer;
     transition: all 0.2s ease;
-    /* 增加点击区域（即使图片有空隙，也能点击） */
     transform: scale(1);
-    /* 手机端适配：适当放大，提升操作感 */
+    border: 3px solid transparent;
+    border-radius: 12px;
+    overflow: hidden;
+    /* 爱心边框效果 */
+    box-shadow: 
+        0 0 0 3px #ff6b8b,
+        inset 0 0 0 2px #ff6b8b;
+    /* 手机端适配 */
     @media (max-width: 768px) {
-        width: 45px;
-        height: 45px;
+        width: 70px;
+        height: 70px;
     }
 }
 
-/* 爱心hover/点击效果，提升交互反馈 */
-.heart:hover {
-    transform: scale(1.1); /*  hover放大，提示可点击 */
-    filter: brightness(1.2);
+/* 图片内嵌的img元素 */
+.game-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
 }
 
-.heart:active {
+/* 正确图片的边框样式 */
+.game-image.correct {
+    box-shadow: 
+        0 0 0 3px #ff6b8b,
+        inset 0 0 0 2px #ff6b8b,
+        0 0 15px rgba(255, 107, 139, 0.8);
+}
+
+/* 错误图片的边框样式 */
+.game-image.error {
+    box-shadow: 
+        0 0 0 3px #666,
+        inset 0 0 0 2px #666,
+        0 0 15px rgba(102, 102, 102, 0.8);
+}
+
+/* 图片hover/点击效果 */
+.game-image:hover {
+    transform: scale(1.1);
+    filter: brightness(1.1);
+}
+
+.game-image:active {
     transform: scale(0.95);
 }
 

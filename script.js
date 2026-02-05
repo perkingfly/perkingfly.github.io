@@ -1,7 +1,9 @@
 // ---------------------- 全局配置（新手可修改这里的参数） ----------------------
 const CONFIG = {
     // 游戏1：爱心收集目标数量
-    heartTarget: 4,
+    heartTarget: 26,
+    // 游戏1：初始生命值
+    initialLives: 3,
     // 游戏3：通关所需好感度（新增：好感度达标值）
     affectionTarget: 50,
     // 惊喜2：相册图片数量（你放入album文件夹的照片数）
@@ -327,73 +329,157 @@ function showTransition(gameNum) {
     }, 1000);
 }
 
-// ---------------------- 第五步：各游戏实现（优化爱心收集，提升点击灵敏性） ----------------------
-// 游戏1：爱心收集（优化点击响应，放大爱心，提升体验）
+// ---------------------- 第五步：各游戏实现（修改游戏1为点击图片模式） ----------------------
+// 游戏1：图片点击收集（修改：从爱心改为图片，添加生命值系统）
 function initGame1() {
-    const heartContainer = document.getElementById("heartContainer");
+    const imageContainer = document.getElementById("imageContainer");
     const currentHeartsEl = document.getElementById("currentHearts");
+    const lifeCountEl = document.getElementById("lifeCount");
     let currentHearts = 0;
+    let lives = CONFIG.initialLives;
 
     // 重置数据
     currentHearts = 0;
+    lives = CONFIG.initialLives;
     currentHeartsEl.textContent = "0";
-    heartContainer.innerHTML = "";
+    lifeCountEl.textContent = lives;
+    imageContainer.innerHTML = "";
 
-    // 生成爱心（定时生成，随机位置/速度，优化点击响应）
-    const generateHeart = () => {
-        if (currentHearts >= CONFIG.heartTarget) return;
-
-        const heart = document.createElement("div");
-        heart.classList.add("heart");
-
-        // 随机位置（水平，预留爱心宽度，避免超出容器）
-        const containerWidth = heartContainer.offsetWidth;
-        const heartWidth = heart.offsetWidth || 50; // 兜底爱心宽度
-        const randomX = Math.random() * (containerWidth - heartWidth);
-        heart.style.left = `${randomX}px`;
-        heart.style.top = "-50px"; // 对应爱心高度，避免初始显示不全
-
-        // 优化下落速度：降低随机性，提升点击机会（1~2 → 0.8~1.5）
-        const randomSpeed = Math.random() * 0.7 + 0.8;
-
-        // 爱心下落动画
-        const fallHeart = () => {
-            if (!heart.parentNode) return; // 爱心已被收集，停止动画
-            let top = parseFloat(heart.style.top);
-            if (top > heartContainer.offsetHeight) {
-                heart.remove();
-                return;
-            }
-            heart.style.top = `${top + randomSpeed}px`;
-            requestAnimationFrame(fallHeart);
-        };
-
-        // 点击爱心收集（优化：阻止事件冒泡，提升响应速度）
-        heart.addEventListener("click", (e) => {
-            e.stopPropagation(); // 阻止事件冒泡，避免触发容器其他事件
-            heart.remove(); // 立即移除，提升反馈感
-            currentHearts++;
-            currentHeartsEl.textContent = currentHearts;
-
-            // 通关判断（立即响应，不等待动画）
-            if (currentHearts >= CONFIG.heartTarget) {
-                showTransition(1);
-            }
-        }, { passive: true }); // 被动监听，提升手机端性能
-
-        // 添加到容器并开始下落
-        heartContainer.appendChild(heart);
-        fallHeart();
+    // 图片资源列表（正确和错误图片）
+    const imageResources = {
+        correct: [
+            { src: "assets/game/right_1.gif", type: "correct" },
+            { src: "assets/game/right_2.gif", type: "correct" },
+            { src: "assets/game/right_3.gif", type: "correct" },
+            { src: "assets/game/right_4.gif", type: "correct" },
+            { src: "assets/game/right_5.gif", type: "correct" },
+            { src: "assets/game/right_6.gif", type: "correct" },
+            { src: "assets/game/right_7.gif", type: "correct" },
+            { src: "assets/game/right_8.gif", type: "correct" },
+            { src: "assets/game/right_9.gif", type: "correct" },
+            { src: "assets/game/right_10.gif", type: "correct" }
+        ],
+        error: [
+            { src: "assets/game/error_1.gif", type: "error" },
+            { src: "assets/game/error_2.gif", type: "error" },
+            { src: "assets/game/error_3.gif", type: "error" },
+            { src: "assets/game/error_4.gif", type: "error" },
+            { src: "assets/game/error_5.gif", type: "error" },
+            { src: "assets/game/error_6.gif", type: "error" },
+            { src: "assets/game/error_7.gif", type: "error" },
+            { src: "assets/game/error_8.gif", type: "error" },
+            { src: "assets/game/error_9.gif", type: "error" },
+            { src: "assets/game/error_10.gif", type: "error" }
+        ]
     };
 
-    // 每隔300ms生成一个爱心（保持频率，保证通关效率）
-    const heartInterval = setInterval(() => {
-        if (currentHearts >= CONFIG.heartTarget) {
-            clearInterval(heartInterval);
+    // 生成图片（定时生成，随机位置/速度）
+    const generateImage = () => {
+        if (currentHearts >= CONFIG.heartTarget || lives <= 0) return;
+
+        // 随机决定生成正确还是错误图片（70%正确，30%错误）
+        const isCorrect = Math.random() < 0.7;
+        const imageList = isCorrect ? imageResources.correct : imageResources.error;
+        const randomImage = imageList[Math.floor(Math.random() * imageList.length)];
+
+        // 创建图片元素
+        const imageDiv = document.createElement("div");
+        imageDiv.classList.add("game-image");
+        imageDiv.classList.add(randomImage.type);
+        imageDiv.dataset.type = randomImage.type;
+
+        // 创建img元素
+        const img = document.createElement("img");
+        img.src = randomImage.src;
+        img.alt = randomImage.type === "correct" ? "正确图片" : "错误图片";
+        
+        // 处理图片加载错误
+        img.onerror = function() {
+            // 如果图片加载失败，用默认图标替代
+            this.src = randomImage.type === "correct" ? 
+                "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAiIGhlaWdodD0iODAiIHZpZXdCb3g9IjAgMCA4MCA4MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjgwIiBoZWlnaHQ9IjgwIiByeD0iOCIgZmlsbD0iI0ZGNkI4QiIvPgo8cGF0aCBkPSJNMzAgMzVMNDUgNTBMNTUgMzUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMyIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+Cjwvc3ZnPgo=" : 
+                "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAiIGhlaWdodD0iODAiIHZpZXdCb3g9IjAgMCA4MCA4MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjgwIiBoZWlnaHQ9IjgwIiByeD0iOCIgZmlsbD0iIzY2NjY2NiIvPgo8cGF0aCBkPSJNMzAgMzBMNTAgNTAiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMyIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CjxwYXRoIGQ9Ik01MCAzMEwzMCA1MCIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLXdpZHRoPSIzIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KPC9zdmc+Cg==";
+            this.onerror = null; // 防止循环错误
+        };
+
+        imageDiv.appendChild(img);
+
+        // 随机位置（水平，预留图片宽度，避免超出容器）
+        const containerWidth = imageContainer.offsetWidth;
+        const imageWidth = 80; // 图片宽度
+        const randomX = Math.random() * (containerWidth - imageWidth);
+        imageDiv.style.left = `${randomX}px`;
+        imageDiv.style.top = "-80px"; // 从容器上方开始下落
+
+        // 随机下落速度
+        const randomSpeed = Math.random() * 0.7 + 0.8;
+
+        // 图片下落动画
+        const fallImage = () => {
+            if (!imageDiv.parentNode) return; // 图片已被点击，停止动画
+            let top = parseFloat(imageDiv.style.top);
+            if (top > imageContainer.offsetHeight) {
+                // 图片落到容器底部，移除
+                imageDiv.remove();
+                return;
+            }
+            imageDiv.style.top = `${top + randomSpeed}px`;
+            requestAnimationFrame(fallImage);
+        };
+
+        // 点击图片事件
+        imageDiv.addEventListener("click", (e) => {
+            e.stopPropagation(); // 阻止事件冒泡
+            const type = imageDiv.dataset.type;
+            
+            if (type === "correct") {
+                // 点击正确图片：增加收集数量
+                imageDiv.remove();
+                currentHearts++;
+                currentHeartsEl.textContent = currentHearts;
+
+                // 通关判断
+                if (currentHearts >= CONFIG.heartTarget) {
+                    showTransition(1);
+                }
+            } else {
+                // 点击错误图片：扣除生命值
+                imageDiv.remove();
+                lives--;
+                lifeCountEl.textContent = lives;
+
+                // 游戏结束判断
+                if (lives <= 0) {
+                    setTimeout(() => {
+                        alert("游戏结束！生命值耗尽，点击错误图片太多了哦～\n重新开始吧！");
+                        initGame1(); // 重新开始游戏
+                    }, 500);
+                } else {
+                    // 显示扣血提示
+                    const hint = document.getElementById("game1Hint");
+                    hint.style.color = "#ff4757";
+                    hint.textContent = "哎呀，点到臭布布了！扣1点生命值";
+                    setTimeout(() => {
+                        hint.style.color = "#ff6b8b";
+                        hint.textContent = "别点臭布布，只点一二宝";
+                    }, 1000);
+                }
+            }
+        }, { passive: true });
+
+        // 添加到容器并开始下落
+        imageContainer.appendChild(imageDiv);
+        fallImage();
+    };
+
+    // 每隔400ms生成一个图片
+    const imageInterval = setInterval(() => {
+        if (currentHearts >= CONFIG.heartTarget || lives <= 0) {
+            clearInterval(imageInterval);
             return;
         }
-        generateHeart();
-    }, 300);
+        generateImage();
+    }, 400);
 }
 
 // 游戏2：情侣拼图（9宫格）【100%兼容所有图片，彻底解决空白问题】

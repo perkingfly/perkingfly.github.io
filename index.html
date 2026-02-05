@@ -38,11 +38,11 @@
         <div class="game-list">
             <!-- 游戏1：爱心收集（初始解锁，未通关可玩） -->
             <div id="game1Btn" class="game-btn" data-game="1">
-                游戏1：爱心收集（99颗）
+                游戏1：收集小可爱
             </div>
             <!-- 游戏2：情侣拼图（初始锁定，游戏1通关后解锁） -->
             <div id="game2Btn" class="game-btn locked" data-game="2">
-                游戏2：情侣拼图（9宫格）
+                游戏2：拼出大可爱
             </div>
             <!-- 游戏3：请重新攻略我（初始锁定，游戏2通关后解锁） -->
             <div id="game3Btn" class="game-btn locked" data-game="3">
@@ -55,15 +55,19 @@
     <div id="gamePage" class="page">
         <!-- 游戏1：爱心收集 -->
         <div id="game1" class="game-content">
-            <div class="game-title">爱心收集 ❤️ 收集满<span id="targetHearts">99</span>颗通关</div>
-            <div class="game-score">当前收集：<span id="currentHearts">0</span>颗</div>
-            <div id="heartContainer" class="heart-container"></div>
+            <div class="game-title"> ❤️ 收集满<span id="targetHearts">26</span>个一二通关</div>
+            <div class="game-score">
+                当前收集：<span id="currentHearts">0</span>颗 | 
+                生命值：<span id="lifeCount">3</span> ❤️ | 
+                <span id="game1Hint" style="color:#ff6b8b; margin-left:10px;">别点臭布布，只点一二宝</span>
+            </div>
+            <div id="imageContainer" class="image-container"></div>
             <button id="game1Quit" class="game-quit-btn">退出游戏</button>
         </div>
 
         <!-- 游戏2：情侣拼图（9宫格） -->
         <div id="game2" class="game-content hidden">
-            <div class="game-title">情侣拼图 ❤️ 拼回我们的合照吧</div>
+            <div class="game-title">拼出大可爱 ❤️ 拼回我们的合照吧</div>
             <div id="puzzleContainer" class="puzzle-container"></div>
             <button id="game2Quit" class="game-quit-btn">退出游戏</button>
         </div>
