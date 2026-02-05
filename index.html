@@ -48,10 +48,6 @@
             <div id="game3Btn" class="game-btn locked" data-game="3">
                 游戏3：请重新攻略我
             </div>
-            <!-- 游戏4：情侣消消乐（初始锁定，游戏3通关后解锁） -->
-            <div id="game4Btn" class="game-btn locked" data-game="4">
-                游戏4：情侣消消乐（520分）
-            </div>
         </div>
     </div>
 
@@ -87,14 +83,6 @@
             <div class="game-score">当前好感度：<span id="correctAnswers">0</span></div>
             <button id="game3Quit" class="game-quit-btn">退出游戏</button>
         </div>
-
-        <!-- 游戏4：情侣消消乐 -->
-        <div id="game4" class="game-content hidden">
-            <div class="game-title">情侣消消乐 ❤️ 累计消除520分通关</div>
-            <div class="game-score">当前分数：<span id="matchScore">0</span>/520分</div>
-            <div id="matchContainer" class="match-container"></div>
-            <button id="game4Quit" class="game-quit-btn">退出游戏</button>
-        </div>
     </div>
 
     <!-- 4. 惊喜页面（所有惊喜整合在这里，按需显示/隐藏，带防剧透） -->
@@ -109,13 +97,13 @@
 
         <!-- 惊喜2：合照相册 -->
         <div id="surprise2" class="surprise-content hidden">
-            <div class="surprise-title">我们的合照相册 ❤️</div>
+            <div class="surprise-title">请你看个大可爱 ❤️</div>
             <div class="album-container">
                 <img id="albumImg" src="assets/surprise/album/album_1.jpg" alt="合照">
                 <button class="album-btn prev" onclick="changeAlbum(-1)">←</button>
                 <button class="album-btn next" onclick="changeAlbum(1)">→</button>
             </div>
-            <div class="surprise-desc">每一张照片，都是我们的美好回忆～</div>
+            <div class="surprise-desc">嘿嘿，本人小小处理一番，希望你喜欢～</div>
             <button id="surprise2Back" class="surprise-back-btn">看完返回游戏列表</button>
         </div>
 
@@ -125,14 +113,6 @@
             <audio id="voiceAudio" src="assets/surprise/voice.mp3" controls preload="auto"></audio>
             <div class="surprise-desc">这是我想对你说的悄悄话～</div>
             <button id="surprise3Back" class="surprise-back-btn">听完返回游戏列表</button>
-        </div>
-
-        <!-- 惊喜4：最终祝福 -->
-        <div id="surprise4" class="surprise-content hidden">
-            <div class="surprise-title">一周年最终祝福 ❤️</div>
-            <img id="letterImg" src="assets/surprise/letter.jpg" alt="手写情书" class="letter-img">
-            <div class="surprise-desc">亲爱的，一周年快乐～未来的每一年，我都想和你一起度过 ❤️</div>
-            <button id="surprise4Back" class="surprise-back-btn">看完返回游戏列表</button>
         </div>
     </div>
 

@@ -1,11 +1,9 @@
 // ---------------------- 全局配置（新手可修改这里的参数） ----------------------
 const CONFIG = {
-    // 游戏1：爱心收集目标数量（恢复为99，符合HTML文案）
-    heartTarget: 99,
+    // 游戏1：爱心收集目标数量
+    heartTarget: 4,
     // 游戏3：通关所需好感度（新增：好感度达标值）
     affectionTarget: 50,
-    // 游戏4：消消乐通关分数
-    matchTarget: 520,
     // 惊喜2：相册图片数量（你放入album文件夹的照片数）
     albumCount: 2,
     // 本地存储键名（无需修改）
@@ -16,8 +14,8 @@ const CONFIG = {
 function initStorage() {
     const defaultStatus = {
         isIntroDone: false, // 开场亲嘴是否完成
-        gamePassed: [false, false, false, false], // 4个游戏是否通关（按顺序）
-        surpriseUnlocked: [false, false, false, false] // 4个惊喜是否解锁（按顺序）
+        gamePassed: [false, false, false], // 3个游戏是否通关（按顺序）
+        surpriseUnlocked: [false, false, false] // 3个惊喜是否解锁（按顺序）
     };
 
     // 如果本地存储中没有数据，存入默认数据
@@ -63,12 +61,11 @@ function initElements() {
     progressFill = document.getElementById("progressFill");
     girl = document.querySelector(".girl");
 
-    // 主页面按钮相关（仅保留游戏按钮，移除惊喜按钮）
+    // 主页面按钮相关（仅保留3个游戏按钮）
     gameBtns = [
         document.getElementById("game1Btn"),
         document.getElementById("game2Btn"),
-        document.getElementById("game3Btn"),
-        document.getElementById("game4Btn")
+        document.getElementById("game3Btn")
     ];
 
     // 初始化惊喜1的日记链接（新手快捷方式：直接替换下面的 "" 中的内容）
@@ -191,9 +188,6 @@ function bindEvents() {
     document.getElementById("game3Quit").addEventListener("click", () => {
         backToMain();
     });
-    document.getElementById("game4Quit").addEventListener("click", () => {
-        backToMain();
-    });
 
     // 惊喜返回按钮事件（返回主页面，解锁下一个游戏）
     document.getElementById("surprise1Back").addEventListener("click", () => {
@@ -203,9 +197,6 @@ function bindEvents() {
         backToMain();
     });
     document.getElementById("surprise3Back").addEventListener("click", () => {
-        backToMain();
-    });
-    document.getElementById("surprise4Back").addEventListener("click", () => {
         backToMain();
     });
 
@@ -263,7 +254,7 @@ function updateMainPage() {
     });
 }
 
-// 进入游戏页面（参数：游戏编号 1-4）
+// 进入游戏页面（参数：游戏编号 1-3）
 function enterGame(gameNum) {
     mainPage.classList.remove("active");
     gamePage.classList.add("active");
@@ -285,13 +276,10 @@ function enterGame(gameNum) {
         case 3:
             initGame3();
             break;
-        case 4:
-            initGame4();
-            break;
     }
 }
 
-// 进入惊喜页面（参数：惊喜编号 1-4，带防剧透）
+// 进入惊喜页面（参数：惊喜编号 1-3，带防剧透）
 function enterSurprise(surpriseNum) {
     const status = getStorageStatus();
 
@@ -893,67 +881,6 @@ function initGame3() {
     }
 }
 
-// 游戏4：情侣消消乐
-function initGame4() {
-    const matchContainer = document.getElementById("matchContainer");
-    const matchScoreEl = document.getElementById("matchScore");
-    const matchItems = [];
-    let matchScore = 0;
-    const icons = [
-        "❤️", "⭐", "🌙", "💋", "🌸" // 情侣图标提升氛围感
-    ];
-
-    // 重置数据
-    matchScore = 0;
-    matchScoreEl.textContent = "0";
-    matchContainer.innerHTML = "";
-
-    // 生成25个消消乐元素（5x5）
-    for (let i = 0; i < 25; i++) {
-        const item = document.createElement("div");
-        item.classList.add("match-item");
-        const randomIcon = icons[Math.floor(Math.random() * icons.length)];
-        item.dataset.icon = randomIcon;
-        item.textContent = randomIcon;
-        matchItems.push(item);
-        matchContainer.appendChild(item);
-    }
-
-    // 点击元素消除（简化版：相邻相同元素消除）
-    let selectedItem = null;
-    matchItems.forEach(item => {
-        item.addEventListener("click", () => {
-            if (!selectedItem) {
-                selectedItem = item;
-                item.style.opacity = 0.7;
-            } else {
-                // 检查是否相邻且相同
-                const selectedIndex = matchItems.indexOf(selectedItem);
-                const currentIndex = matchItems.indexOf(item);
-                const isAdjacent = Math.abs(selectedIndex - currentIndex) === 1 || Math.abs(selectedIndex - currentIndex) === 5;
-                const isSameIcon = selectedItem.dataset.icon === item.dataset.icon;
-
-                if (isAdjacent && isSameIcon) {
-                    // 消除元素，加分
-                    selectedItem.remove();
-                    item.remove();
-                    matchScore += 10;
-                    matchScoreEl.textContent = matchScore;
-
-                    // 通关判断
-                    if (matchScore >= CONFIG.matchTarget) {
-                        showTransition(4);
-                    }
-                }
-
-                // 重置选中状态
-                selectedItem.style.opacity = 1;
-                selectedItem = null;
-            }
-        });
-    });
-}
-
 // ---------------------- 第六步：惊喜辅助功能 ----------------------
 // 惊喜2：相册切换
 function changeAlbum(direction) {
@@ -989,4 +916,4 @@ window.onload = function() {
         introPage.classList.remove("active");
         mainPage.classList.add("active");
     }
-};
+}
