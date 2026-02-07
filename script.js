@@ -1,14 +1,20 @@
 // ---------------------- 全局配置（新手可修改这里的参数） ----------------------
 const CONFIG = {
     // 游戏1：爱心收集目标数量
-    heartTarget: 26,
+    heartTarget: 4,
     // 游戏1：初始生命值
     initialLives: 3,
-    // 游戏3：通关所需好感度（新增：好感度达标值）
+    // 游戏3：通关所需好感度
     affectionTarget: 50,
-    // 惊喜2：相册图片数量（你放入album文件夹的照片数）
+    // 惊喜2：相册图片数量
     albumCount: 2,
-    // 本地存储键名（无需修改）
+    // 游戏2：拼图配置（新增）
+    puzzleConfig: {
+        rows: 4,     // 行数（3 → 3x3=9宫格）
+        cols: 4,     // 列数（3 → 3x3=9宫格）
+        gap: 4       // 碎片间距（像素）
+    },
+    // 本地存储键名
     storageKey: "Love_1st_Anniversary_Status"
 };
 
@@ -482,109 +488,136 @@ function initGame1() {
     }, 400);
 }
 
-// 游戏2：情侣拼图（9宫格）【100%兼容所有图片，彻底解决空白问题】
+// 游戏2：情侣拼图（可配置宫格数）
 function initGame2() {
     const puzzleContainer = document.getElementById("puzzleContainer");
     const puzzleSrc = "assets/game/puzzle_origin.png"; // 你的图片路径
     const puzzlePieces = [];
     let correctPieces = 0;
+    
+    // 获取配置
+    const ROWS = CONFIG.puzzleConfig.rows;
+    const COLS = CONFIG.puzzleConfig.cols;
+    const GAP = CONFIG.puzzleConfig.gap;
+    const TOTAL_PIECES = ROWS * COLS; // 总碎片数
 
-    // 1. 重置容器（清空所有旧内容）
+    // 1. 重置容器
     puzzleContainer.innerHTML = "";
-    puzzleContainer.style.height = "auto"; // 重置高度
+    puzzleContainer.style.height = "auto";
+    
+    // 设置容器内边距
+    puzzleContainer.style.padding = `${GAP}px`;
 
-    // 2. 先加载原图，获取真实尺寸
+    // 2. 加载原图
     const img = new Image();
-    img.src = puzzleSrc + "?t=" + new Date().getTime(); // 禁用缓存，确保加载最新图片
+    img.src = puzzleSrc + "?t=" + new Date().getTime();
     img.onload = function() {
-        // 2.1 计算原图宽高比，设置容器高度（适配图片比例）
+        // 2.1 根据原图比例设置容器高度
         const imgRatio = img.width / img.height;
         puzzleContainer.style.height = `${puzzleContainer.offsetWidth / imgRatio}px`;
 
-        // 2.2 创建拼图网格容器（承载9个碎片）
+        // 2.2 创建拼图网格容器
         const puzzleGrid = document.createElement("div");
         puzzleGrid.classList.add("puzzle-grid");
+        
+        // 动态设置网格样式
+        puzzleGrid.style.display = "grid";
+        puzzleGrid.style.gridTemplateColumns = `repeat(${COLS}, 1fr)`;
+        puzzleGrid.style.gridTemplateRows = `repeat(${ROWS}, 1fr)`;
+        puzzleGrid.style.gap = `${GAP}px`;
+        puzzleGrid.style.width = "100%";
+        puzzleGrid.style.height = "100%";
+        puzzleGrid.style.position = "relative";
+        puzzleGrid.style.zIndex = "2";
+        
         puzzleContainer.appendChild(puzzleGrid);
 
-        // 3. 生成9个碎片（遮罩层），每个碎片对应原图的一个区域
-        for (let i = 0; i < 9; i++) {
-            // 3.1 创建碎片元素
+        // 3. 生成碎片
+        for (let i = 0; i < TOTAL_PIECES; i++) {
+            // 3.1 计算行和列
+            const row = Math.floor(i / COLS);
+            const col = i % COLS;
+
+            // 3.2 创建碎片元素
             const piece = document.createElement("div");
             piece.classList.add("puzzle-piece");
             piece.dataset.index = i;
-            piece.dataset.correctPos = i; // 记录碎片的正确位置索引
+            piece.dataset.correctPos = i;
 
-            // 3.2 计算碎片对应的原图区域（行/列）
-            const row = Math.floor(i / 3); // 0,0,0,1,1,1,2,2,2
-            const col = i % 3; // 0,1,2,0,1,2,0,1,2
-
-            // 3.3 创建碎片内的图片（显示原图的对应区域，无复杂计算）
+            // 3.3 创建碎片内的图片
             const pieceImg = document.createElement("img");
             pieceImg.classList.add("puzzle-piece-img");
             pieceImg.src = puzzleSrc;
-            // 关键：偏移图片位置，让碎片只显示对应区域（简单直接，无比例错误）
-            pieceImg.style.transform = `translate(${-col * 100 / 3}%, ${-row * 100 / 3}%)`;
+            
+            // 动态计算图片偏移量
+            const xOffset = -col * (100 / COLS);  // 水平偏移百分比
+            const yOffset = -row * (100 / ROWS);  // 垂直偏移百分比
+            
+            // 设置图片尺寸（根据行列数放大）
+            pieceImg.style.width = `${COLS * 100}%`;
+            pieceImg.style.height = `${ROWS * 100}%`;
+            pieceImg.style.transform = `translate(${xOffset}%, ${yOffset}%)`;
+            pieceImg.style.objectFit = "cover";
 
             // 3.4 组装碎片
             piece.appendChild(pieceImg);
             puzzlePieces.push({
                 element: piece,
-                correctPos: i // 记录正确位置，用于后续验证
+                correctPos: i
             });
             puzzleGrid.appendChild(piece);
         }
 
-        // 4. 打乱碎片顺序（只打乱DOM位置，不改变碎片内的图片区域）
+        // 4. 打乱碎片顺序
         const shuffledPieces = shuffleArray(puzzlePieces);
-        puzzleGrid.innerHTML = ""; // 清空原有碎片
+        puzzleGrid.innerHTML = "";
         shuffledPieces.forEach((puzzleObj, index) => {
-            puzzleObj.element.dataset.currentPos = index; // 记录当前位置
+            puzzleObj.element.dataset.currentPos = index;
             puzzleGrid.appendChild(puzzleObj.element);
         });
 
-        // 5. 点击交换碎片功能（直观易懂，无BUG）
+        // 5. 点击交换功能
         let selectedPiece = null;
         puzzlePieces.forEach(puzzleObj => {
             const piece = puzzleObj.element;
             piece.addEventListener("click", () => {
                 if (!selectedPiece) {
-                    // 第一次点击：选中碎片，高亮提示
+                    // 第一次点击：选中
                     selectedPiece = puzzleObj;
-                    piece.style.opacity = 0.7;
-                    piece.style.border = "3px solid #ff4757"; // 红色边框高亮，方便识别
+                    piece.style.opacity = "0.7";
+                    piece.style.border = "3px solid #ff4757";
                 } else {
-                    // 第二次点击：交换两个碎片的位置
+                    // 第二次点击：交换
                     const piece1 = selectedPiece.element;
                     const piece2 = puzzleObj.element;
                     const parent = puzzleGrid;
 
-                    // 保存两个碎片的当前位置
                     const tempPos1 = piece1.dataset.currentPos;
                     const tempPos2 = piece2.dataset.currentPos;
 
-                    // 交换DOM位置（简单粗暴，不会出错）
+                    // 交换DOM位置
                     const tempDiv = document.createElement("div");
                     parent.insertBefore(tempDiv, piece1);
                     parent.insertBefore(piece1, piece2);
                     parent.insertBefore(piece2, tempDiv);
                     tempDiv.remove();
 
-                    // 更新两个碎片的当前位置
+                    // 更新位置信息
                     piece1.dataset.currentPos = tempPos2;
                     piece2.dataset.currentPos = tempPos1;
 
                     // 重置选中状态
-                    piece1.style.opacity = 1;
+                    piece1.style.opacity = "1";
                     piece1.style.border = "1px solid rgba(255, 107, 139, 0.3)";
                     selectedPiece = null;
 
-                    // 6. 检查是否拼对（实时验证）
+                    // 6. 检查拼图正确性
                     checkPuzzleCorrect();
                 }
             });
         });
 
-        // 6. 检查拼图是否全部正确
+        // 6. 检查拼图是否正确
         function checkPuzzleCorrect() {
             correctPieces = 0;
             puzzlePieces.forEach(puzzleObj => {
@@ -592,35 +625,43 @@ function initGame2() {
                 const currentPos = parseInt(piece.dataset.currentPos);
                 const correctPos = puzzleObj.correctPos;
 
-                // 碎片当前位置 = 正确位置 → 拼对了
                 if (currentPos === correctPos) {
                     correctPieces++;
-                    piece.style.border = "2px solid #ff6b8b"; // 粉色边框提示正确
+                    piece.style.border = "2px solid #ff6b8b";
                 } else {
-                    piece.style.border = "1px solid rgba(255, 107, 139, 0.3)"; // 默认边框
+                    piece.style.border = "1px solid rgba(255, 107, 139, 0.3)";
                 }
             });
 
-            // 9个碎片全部拼对 → 通关
-            if (correctPieces === 9) {
+            // 全部拼对 → 通关
+            if (correctPieces === TOTAL_PIECES) {
                 setTimeout(() => {
-                    alert("拼图完美完成！🎉");
+                    let message = "";
+                    if (TOTAL_PIECES === 9) {
+                        message = "9宫格拼图完美完成！🎉";
+                    } else if (TOTAL_PIECES === 16) {
+                        message = "16宫格拼图完美完成！🎉（高级难度）";
+                    } else if (TOTAL_PIECES === 25) {
+                        message = "25宫格拼图完美完成！🎉（专家难度）";
+                    } else {
+                        message = `${TOTAL_PIECES}块拼图完美完成！🎉`;
+                    }
+                    alert(message);
                     showTransition(2);
                 }, 1000);
             }
         }
     };
 
-    // 图片加载失败：明确提示，方便排查
+    // 图片加载失败处理
     img.onerror = function() {
         alert(`❌ 拼图图片加载失败！
 请检查：
-1. 图片路径是否正确：${puzzleSrc}
-2. 图片是否存在/未损坏
-3. 文件夹层级是否正确（如 assets/game/ 文件夹是否存在）`);
+1. 图片路径：${puzzleSrc}
+2. 图片是否存在
+3. 文件夹路径是否正确`);
     };
 }
-
 // 游戏3：请重新攻略我（恋爱视觉小说）【核心修改：好感度+支线+唯一结局】
 function initGame3() {
     const novelAvatar = document.getElementById("novelAvatar");

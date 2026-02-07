@@ -373,54 +373,38 @@ body {
     transform: scale(0.95);
 }
 
-/* 游戏2：拼图容器 - 改用相对定位，承载完整原图 */
+/* 游戏2：拼图容器 - 通用样式 */
 .puzzle-container {
     width: 90%;
     max-width: 600px;
     background-color: rgba(255, 255, 255, 0.15);
     border-radius: 12px;
-    padding: 5px;
     box-shadow: inset 0 0 20px rgba(255, 107, 139, 0.2);
     box-sizing: border-box;
-    position: relative; /* 关键：作为碎片和原图的定位容器 */
-    overflow: hidden; /* 隐藏超出容器的内容 */
+    position: relative;
+    overflow: hidden;
+    /* 内边距由JavaScript动态设置 */
 }
 
-/* 完整拼图原图 - 绝对定位，铺满容器，不直接显示（被碎片遮罩） */
-.puzzle-origin-img {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover; /* 适配容器尺寸，不拉伸变形 */
-    z-index: 1; /* 放在碎片下方 */
-}
-
-/* 拼图网格容器 - 承载9个碎片遮罩 */
+/* 拼图网格容器 - 基础样式 */
 .puzzle-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(3, 1fr);
-    gap: 5px;
     width: 100%;
     height: 100%;
     position: relative;
-    z-index: 2; /* 放在原图上方，作为遮罩 */
+    z-index: 2;
+    /* 具体的网格布局由JavaScript动态设置 */
 }
 
-/* 拼图碎片 - 作为遮罩，只显示对应区域的原图 */
+/* 拼图碎片 - 通用样式 */
 .puzzle-piece {
-    width: 100%;
-    height: 100%;
     cursor: grab;
     border-radius: 8px;
     transition: all 0.3s ease;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     border: 1px solid rgba(255, 107, 139, 0.3);
     position: relative;
-    overflow: hidden; /* 关键：隐藏超出碎片的原图部分 */
-    background-color: rgba(255, 255, 255, 0.05); /* 灰色兜底，避免完全空白 */
+    overflow: hidden;
+    background-color: rgba(255, 255, 255, 0.05);
 }
 
 .puzzle-piece:active {
@@ -432,15 +416,13 @@ body {
     transform: scale(1.02);
 }
 
-/* 碎片内的图片（对应原图的对应区域） */
+/* 拼图碎片内的图片 - 动态尺寸 */
 .puzzle-piece-img {
     position: absolute;
     top: 0;
     left: 0;
-    width: 300%; /* 3倍宽度 = 3列碎片 */
-    height: 300%; /* 3倍高度 = 3行碎片 */
     object-fit: cover;
-    z-index: -1; /* 放在碎片遮罩下方 */
+    /* 具体的宽高百分比由JavaScript动态设置 */
 }
 
 .avatar-container {
