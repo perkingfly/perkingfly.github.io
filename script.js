@@ -1,18 +1,18 @@
 // ---------------------- 全局配置（新手可修改这里的参数） ----------------------
 const CONFIG = {
     // 游戏1：爱心收集目标数量
-    heartTarget: 4,
+    heartTarget: 20,
     // 游戏1：初始生命值
     initialLives: 3,
     // 游戏3：通关所需好感度
-    affectionTarget: 50,
+    affectionTarget: 100,
     // 惊喜2：相册图片数量
     albumCount: 2,
     // 游戏2：拼图配置（新增）
     puzzleConfig: {
-        rows: 4,     // 行数（3 → 3x3=9宫格）
+        rows: 3,     // 行数（3 → 3x3=9宫格）
         cols: 4,     // 列数（3 → 3x3=9宫格）
-        gap: 4       // 碎片间距（像素）
+        gap: 0       // 碎片间距（像素）
     },
     // 本地存储键名
     storageKey: "Love_1st_Anniversary_Status"
@@ -363,7 +363,12 @@ function initGame1() {
             { src: "assets/game/right_7.gif", type: "correct" },
             { src: "assets/game/right_8.gif", type: "correct" },
             { src: "assets/game/right_9.gif", type: "correct" },
-            { src: "assets/game/right_10.gif", type: "correct" }
+            { src: "assets/game/right_10.gif", type: "correct" },
+            { src: "assets/game/right_11.gif", type: "correct" },
+            { src: "assets/game/right_12.gif", type: "correct" },
+            { src: "assets/game/right_13.gif", type: "correct" },
+            { src: "assets/game/right_14.gif", type: "correct" },
+            { src: "assets/game/right_15.gif", type: "correct" }
         ],
         error: [
             { src: "assets/game/error_1.gif", type: "error" },
