@@ -666,7 +666,7 @@ function initGame3() {
         {
             id: "start",
             avatar: "assets/characters/boy_avatar.png",
-            dialogue: "嗨～国潮团队缺一人，下把能不能和我一起送外卖？",
+            dialogue: "一天，对面的路人突然拉你进房间：嗨～国潮团队缺一人，下把能不能和我一起送外卖？",
             options: [
                 { text: "嗯~行，来一把", affectionChange: +5, nextNodeId: "node1" },
                 { text: "你的搭讪就这水平？滚", affectionChange: -5, nextNodeId: "node2" },
@@ -738,7 +738,7 @@ function initGame3() {
             options: [
                 { text: "靠，太菜了这国潮仔，跳车跑路", affectionChange: -15, nextNodeId: "node21" },
                 { text: "对不起我坑你们了，还玩吗(●'◡'●)", affectionChange: +20, nextNodeId: "node11" },
-                { text: "不是，又演我一把吗？能不能别演我，再来一把", affectionChange: +11, nextNodeId: "node11" },
+                { text: "不是，能不能别演我，再来一把", affectionChange: +11, nextNodeId: "node11" },
                 { text: "我还有事，先跑了", affectionChange: -5, nextNodeId: "node21" }
             ]
         },
@@ -924,7 +924,7 @@ function initGame3() {
             dialogue: "终于，你俩又开始了2V2的奋战，请选择你想要玩的英雄",
             options: [
                 { text: "沙琪玛沙琪玛沙琪玛", affectionChange: +10, nextNodeId: "node41" },
-                { text: "玩小乔吧，怕他压力太大", affectionChange: +10, nextNodeId: "node41" },
+                { text: "蔡文姬蔡文姬蔡文姬", affectionChange: +10, nextNodeId: "node41" },
                 { text: "玩最擅长的瑶", affectionChange: +5, nextNodeId: "node41" },
                 { text: "纠结选什么英雄导致超时随机了", affectionChange: +1, nextNodeId: "node41" }
             ]
@@ -944,19 +944,73 @@ function initGame3() {
         {
             id: "node41",
             avatar: "assets/characters/boy_avatar.png",
-            dialogue: "终于，2V2出现了一对中辅，靠一手超绝恶心人的姜子牙沙琪玛组合令人闻风丧胆",
+            dialogue: "终于，2V2出现了一对中辅大杀四方，姜子牙极其之恶心，辅助也很可爱",
             options: [
-                { text: "哇你没骗我，真的赢了耶，好厉害", affectionChange: +10, nextNodeId: "node61" },
-                { text: "哇姜子牙好厉害", affectionChange: +1, nextNodeId: "node61" },
-                { text: "哈哈哈你好厉害", affectionChange: +5, nextNodeId: "node61" },
-                { text: "嘿嘿和你玩好有意思", affectionChange: +15, nextNodeId: "node61" }
+                { text: "哇你没骗我，真的赢了耶，好厉害", affectionChange: +10, nextNodeId: "node5" },
+                { text: "哇姜子牙好厉害", affectionChange: +1, nextNodeId: "node5" },
+                { text: "哈哈哈你好厉害", affectionChange: +5, nextNodeId: "node5" },
+                { text: "嘿嘿和你玩好有意思", affectionChange: +15, nextNodeId: "node5" }
+            ]
+        },
+        {
+            id: "node5",
+            avatar: "assets/characters/boy_avatar.png",
+            dialogue: "呼，爽玩了一晚上，到了说再见的时候",
+            options: [
+                { text: "拜拜，明天继续送外卖", affectionChange: +10, nextNodeId: "node5" },
+                { text: "等对方先说拜拜", affectionChange: +1, nextNodeId: "node5" },
+                { text: "啊？要下线了吗，我还没玩够怎么办", affectionChange: +15, nextNodeId: "node5" }
+            ]
+        },
+        {
+            id: "node51",
+            avatar: "assets/characters/boy_avatar.png",
+            dialogue: "意犹未尽地打开了抖音，你发现你新增了一个关注",
+            options: [
+                { text: "什么鬼，这是谁，还是个奥特曼头像", affectionChange: -10, nextNodeId: "node511" },
+                { text: "最好拉黑他，可能是骗子", affectionChange: +1, nextNodeId: "node511" },
+                { text: "难道是他吗，立刻回关", affectionChange: +15, nextNodeId: "node511" },
+                { text: "哇塞竟然有人关注我，我要去和他聊天", affectionChange: -100, nextNodeId: "node511" }
+            ]
+        },
+        {
+            id: "node511",
+            avatar: "assets/characters/boy_avatar.png",
+            dialogue: "perkingfly：[表情]你好",
+            options: [
+                { text: "你是？", affectionChange: +3, nextNodeId: "node5111" },
+                { text: "是国潮吗？", affectionChange: +2, nextNodeId: "node5112" },
+                { text: "好鸡掰，你谁啊？", affectionChange: +10, nextNodeId: "node5111" },
+                { text: "你好，你是？", affectionChange: +1, nextNodeId: "node5111" }
+            ]
+        },
+        {
+            id: "node5111",
+            avatar: "assets/characters/boy_avatar.png",
+            dialogue: "perkingfly：[表情]你好",
+            options: [
+                { text: "你是？", affectionChange: +3, nextNodeId: "node511" },
+                { text: "是国潮吗？", affectionChange: +2, nextNodeId: "node511" },
+                { text: "好鸡掰，你谁啊？", affectionChange: +10, nextNodeId: "node511" },
+                { text: "你好，你是？", affectionChange: +1, nextNodeId: "node511" }
+            ]
+        },
+        {
+            id: "node5112",
+            avatar: "assets/characters/boy_avatar.png",
+            dialogue: "嗯，我看你王者主页是鲁鲁修就加你惹，你看过鲁鲁修吗？",
+            options: [
+                { text: "啊~没看过，只是看到别人发的很有意思...", affectionChange: +1, nextNodeId: "node511" },
+                { text: "是国潮吗？", affectionChange: +2, nextNodeId: "node511" },
+                { text: "好鸡掰，你谁啊？", affectionChange: +10, nextNodeId: "node511" },
+                { text: "你好，你是？", affectionChange: +1, nextNodeId: "node511" }
             ]
         },
         // 最终结局节点
         {
             id: "end",
             avatar: "assets/characters/boy_avatar.png",
-            dialogue: "你好，往后余生，请多指教❤️",
+            dialogue: "恭喜你，攻略成功。往后余生，请多指教❤️",
             options: []
         }
     ];
