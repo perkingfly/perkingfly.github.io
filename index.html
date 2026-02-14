@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>我们的一周年 ❤️</title>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -74,7 +74,6 @@
 
         <!-- 游戏3：请重新攻略我（恋爱视觉小说 - 纯好感度版） -->
         <div id="game3" class="game-content hidden">
-            <!-- 修改1：删除"答对7题"文案，替换为好感度攻略 -->
             <div class="game-title">请重新攻略我 ❤️ 提升好感度通关</div>
             <div class="novel-container">
                 <div class="avatar-container">
@@ -83,7 +82,6 @@
                 <div id="novelDialogue" class="dialogue-box">Hello～还记得我们第一次约会去哪里了吗？</div>
                 <div id="novelOptions" class="options-box"></div>
             </div>
-            <!-- 修改2：删除"答对题"文案，替换为好感度显示 -->
             <div class="game-score">当前好感度：<span id="correctAnswers">0</span></div>
             <button id="game3Quit" class="game-quit-btn">退出游戏</button>
         </div>
@@ -91,12 +89,12 @@
 
     <!-- 4. 惊喜页面（所有惊喜整合在这里，按需显示/隐藏，带防剧透） -->
     <div id="surprisePage" class="page">
-        <!-- 惊喜1：恋爱日记 -->
+        <!-- 惊喜1：语音告白（原来惊喜3） -->
         <div id="surprise1" class="surprise-content">
-            <div class="surprise-title">我的恋爱日记 ❤️</div>
-            <div class="surprise-desc">这是我记录的我们这一年的点点滴滴～</div>
-            <a id="diaryLink" href="#" target="_blank" class="surprise-btn big">点击查看恋爱日记</a>
-            <button id="surprise1Back" class="surprise-back-btn">看完返回游戏列表</button>
+            <div class="surprise-title">专属语音告白 ❤️</div>
+            <audio id="voiceAudio" src="assets/surprise/voice.mp3" controls preload="auto"></audio>
+            <div class="surprise-desc">这是我想对你说的悄悄话～</div>
+            <button id="surprise1Back" class="surprise-back-btn">听完返回游戏列表</button>
         </div>
 
         <!-- 惊喜2：合照相册 -->
@@ -111,12 +109,12 @@
             <button id="surprise2Back" class="surprise-back-btn">看完返回游戏列表</button>
         </div>
 
-        <!-- 惊喜3：语音告白 -->
+        <!-- 惊喜3：恋爱日记（原来惊喜1） -->
         <div id="surprise3" class="surprise-content hidden">
-            <div class="surprise-title">专属语音告白 ❤️</div>
-            <audio id="voiceAudio" src="assets/surprise/voice.mp3" controls preload="auto"></audio>
-            <div class="surprise-desc">这是我想对你说的悄悄话～</div>
-            <button id="surprise3Back" class="surprise-back-btn">听完返回游戏列表</button>
+            <div class="surprise-title">我的恋爱日记 ❤️</div>
+            <div class="surprise-desc">这是我记录的我们这一年的点点滴滴～</div>
+            <a id="diaryLink" href="#" target="_blank" class="surprise-btn big">点击查看恋爱日记</a>
+            <button id="surprise3Back" class="surprise-back-btn">看完返回游戏列表</button>
         </div>
     </div>
 

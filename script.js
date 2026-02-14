@@ -1,17 +1,17 @@
 // ---------------------- 全局配置（新手可修改这里的参数） ----------------------
 const CONFIG = {
     // 游戏1：爱心收集目标数量
-    heartTarget: 36,
+    heartTarget: 36, // 修改为26以匹配HTML中的显示
     // 游戏1：初始生命值
     initialLives: 3,
     // 游戏3：通关所需好感度
     affectionTarget: 100,
     // 惊喜2：相册图片数量
-    albumCount: 2,
+    albumCount: 3,
     // 游戏2：拼图配置（新增）
     puzzleConfig: {
         rows: 3,     // 行数（3 → 3x3=9宫格）
-        cols: 4,     // 列数（3 → 3x3=9宫格）
+        cols: 3,     // 列数（3 → 3x3=9宫格）- 修正为3x3
         gap: 0       // 碎片间距（像素）
     },
     // 本地存储键名
@@ -76,7 +76,7 @@ function initElements() {
         document.getElementById("game3Btn")
     ];
 
-    // 初始化惊喜1的日记链接（新手快捷方式：直接替换下面的 "" 中的内容）
+    // 初始化惊喜3的日记链接（现在惊喜3是恋爱日记）
     document.getElementById("diaryLink").href = "https://hcn5v9f62k5f.feishu.cn/docx/O0ahdAz3VoSvNMxsQ0WcJ34anEe";
 
     // 绑定所有按钮事件
@@ -108,11 +108,6 @@ function bindEvents() {
         startX = e.clientX;
         boyLeft = boy.offsetLeft;
         boy.style.transition = "none"; // 拖动时关闭过渡动画
-        
-        // 实时获取最新元素尺寸
-        const containerWidth = document.querySelector(".intro-container").offsetWidth;
-        const girlLeft = girl.offsetLeft;
-        const boyWidth = boy.offsetWidth;
     });
 
     // 鼠标移动时拖动（优化边界限制）
@@ -120,9 +115,13 @@ function bindEvents() {
         if (!isDragging) return;
         
         // 实时获取最新元素尺寸，确保边界准确
-        const girlLeft = girl.offsetLeft;
-        const boyWidth = boy.offsetWidth;
-        const maxLeft = girlLeft - boyWidth; // 最大左偏移：刚好碰到女生，不超出
+        const container = document.querySelector(".intro-container");
+        const containerRect = container.getBoundingClientRect();
+        const boyRect = boy.getBoundingClientRect();
+        const girlRect = girl.getBoundingClientRect();
+        
+        const boyWidth = boyRect.width;
+        const maxLeft = girlRect.left - containerRect.left - boyWidth + 10; // 加10px容错
         
         const moveX = e.clientX - startX;
         const newLeft = boyLeft + moveX;
@@ -153,15 +152,19 @@ function bindEvents() {
         startX = e.touches[0].clientX;
         boyLeft = boy.offsetLeft;
         boy.style.transition = "none";
-    });
+    }, { passive: false });
 
     boy.addEventListener("touchmove", (e) => {
         e.preventDefault(); // 阻止默认页面滚动，避免滑动bug
         
         // 实时获取最新元素尺寸
-        const girlLeft = girl.offsetLeft;
-        const boyWidth = boy.offsetWidth;
-        const maxLeft = girlLeft - boyWidth;
+        const container = document.querySelector(".intro-container");
+        const containerRect = container.getBoundingClientRect();
+        const boyRect = boy.getBoundingClientRect();
+        const girlRect = girl.getBoundingClientRect();
+        
+        const boyWidth = boyRect.width;
+        const maxLeft = girlRect.left - containerRect.left - boyWidth + 10;
 
         const moveX = e.touches[0].clientX - startX;
         const newLeft = boyLeft + moveX;
@@ -174,7 +177,7 @@ function bindEvents() {
         if (finalLeft >= maxLeft - 10) {
             completeIntro();
         }
-    });
+    }, { passive: false });
 
     // 主页面：游戏按钮点击事件
     gameBtns.forEach((btn, index) => {
@@ -211,8 +214,11 @@ function bindEvents() {
     // 解决浏览器自动播放限制：点击任意位置播放背景音
     document.addEventListener("click", () => {
         if (bgm.paused && !bgm.played.length) {
-            bgm.play();
-            bgmSwitch.textContent = "🎵 背景音：开启";
+            bgm.play().then(() => {
+                bgmSwitch.textContent = "🎵 背景音：开启";
+            }).catch(err => {
+                console.log("自动播放被阻止:", err);
+            });
         }
     }, { once: true });
 }
@@ -221,8 +227,12 @@ function bindEvents() {
 // 切换背景音播放/暂停
 function toggleBgm() {
     if (bgm.paused) {
-        bgm.play();
-        bgmSwitch.textContent = "🎵 背景音：开启";
+        bgm.play().then(() => {
+            bgmSwitch.textContent = "🎵 背景音：开启";
+        }).catch(err => {
+            console.log("播放失败:", err);
+            alert("背景音播放失败，请点击页面任意位置后重试");
+        });
     } else {
         bgm.pause();
         bgmSwitch.textContent = "🎵 背景音：关闭";
@@ -336,7 +346,7 @@ function showTransition(gameNum) {
 }
 
 // ---------------------- 第五步：各游戏实现（修改游戏1为点击图片模式） ----------------------
-// 游戏1：图片点击收集（修改：从爱心改为图片，添加生命值系统）
+// 游戏1：图片点击收集
 function initGame1() {
     const imageContainer = document.getElementById("imageContainer");
     const currentHeartsEl = document.getElementById("currentHearts");
@@ -350,6 +360,9 @@ function initGame1() {
     currentHeartsEl.textContent = "0";
     lifeCountEl.textContent = lives;
     imageContainer.innerHTML = "";
+    
+    // 更新目标数量显示
+    document.getElementById("targetHearts").textContent = CONFIG.heartTarget;
 
     // 图片资源列表（正确和错误图片）
     const imageResources = {
@@ -417,20 +430,19 @@ function initGame1() {
 
         // 随机位置（水平，预留图片宽度，避免超出容器）
         const containerWidth = imageContainer.offsetWidth;
-        const imageWidth = 80; // 图片宽度
+        const imageWidth = 70;
         const randomX = Math.random() * (containerWidth - imageWidth);
         imageDiv.style.left = `${randomX}px`;
-        imageDiv.style.top = "-80px"; // 从容器上方开始下落
+        imageDiv.style.top = "-70px";
 
         // 随机下落速度
         const randomSpeed = Math.random() * 0.7 + 0.8;
 
         // 图片下落动画
         const fallImage = () => {
-            if (!imageDiv.parentNode) return; // 图片已被点击，停止动画
+            if (!imageDiv.parentNode) return;
             let top = parseFloat(imageDiv.style.top);
             if (top > imageContainer.offsetHeight) {
-                // 图片落到容器底部，移除
                 imageDiv.remove();
                 return;
             }
@@ -440,7 +452,7 @@ function initGame1() {
 
         // 点击图片事件
         imageDiv.addEventListener("click", (e) => {
-            e.stopPropagation(); // 阻止事件冒泡
+            e.stopPropagation();
             const type = imageDiv.dataset.type;
             
             if (type === "correct") {
@@ -463,7 +475,7 @@ function initGame1() {
                 if (lives <= 0) {
                     setTimeout(() => {
                         alert("游戏结束！生命值耗尽，点击错误图片太多了哦～\n重新开始吧！");
-                        initGame1(); // 重新开始游戏
+                        initGame1();
                     }, 500);
                 } else {
                     // 显示扣血提示
@@ -476,11 +488,11 @@ function initGame1() {
                     }, 1000);
                 }
             }
-        }, { passive: true });
+        });
 
         // 添加到容器并开始下落
         imageContainer.appendChild(imageDiv);
-        fallImage();
+        requestAnimationFrame(fallImage);
     };
 
     // 每隔400ms生成一个图片
@@ -496,7 +508,7 @@ function initGame1() {
 // 游戏2：情侣拼图（可配置宫格数）
 function initGame2() {
     const puzzleContainer = document.getElementById("puzzleContainer");
-    const puzzleSrc = "assets/game/puzzle_origin.png"; // 你的图片路径
+    const puzzleSrc = "assets/game/puzzle_origin.png";
     const puzzlePieces = [];
     let correctPieces = 0;
     
@@ -504,11 +516,10 @@ function initGame2() {
     const ROWS = CONFIG.puzzleConfig.rows;
     const COLS = CONFIG.puzzleConfig.cols;
     const GAP = CONFIG.puzzleConfig.gap;
-    const TOTAL_PIECES = ROWS * COLS; // 总碎片数
+    const TOTAL_PIECES = ROWS * COLS;
 
     // 1. 重置容器
     puzzleContainer.innerHTML = "";
-    puzzleContainer.style.height = "auto";
     
     // 设置容器内边距
     puzzleContainer.style.padding = `${GAP}px`;
@@ -519,13 +530,13 @@ function initGame2() {
     img.onload = function() {
         // 2.1 根据原图比例设置容器高度
         const imgRatio = img.width / img.height;
-        puzzleContainer.style.height = `${puzzleContainer.offsetWidth / imgRatio}px`;
+        const containerWidth = puzzleContainer.offsetWidth;
+        puzzleContainer.style.height = `${containerWidth / imgRatio}px`;
 
         // 2.2 创建拼图网格容器
         const puzzleGrid = document.createElement("div");
         puzzleGrid.classList.add("puzzle-grid");
         
-        // 动态设置网格样式
         puzzleGrid.style.display = "grid";
         puzzleGrid.style.gridTemplateColumns = `repeat(${COLS}, 1fr)`;
         puzzleGrid.style.gridTemplateRows = `repeat(${ROWS}, 1fr)`;
@@ -533,38 +544,30 @@ function initGame2() {
         puzzleGrid.style.width = "100%";
         puzzleGrid.style.height = "100%";
         puzzleGrid.style.position = "relative";
-        puzzleGrid.style.zIndex = "2";
         
         puzzleContainer.appendChild(puzzleGrid);
 
         // 3. 生成碎片
         for (let i = 0; i < TOTAL_PIECES; i++) {
-            // 3.1 计算行和列
             const row = Math.floor(i / COLS);
             const col = i % COLS;
 
-            // 3.2 创建碎片元素
             const piece = document.createElement("div");
             piece.classList.add("puzzle-piece");
             piece.dataset.index = i;
             piece.dataset.correctPos = i;
 
-            // 3.3 创建碎片内的图片
             const pieceImg = document.createElement("img");
             pieceImg.classList.add("puzzle-piece-img");
             pieceImg.src = puzzleSrc;
             
-            // 动态计算图片偏移量
-            const xOffset = -col * (100 / COLS);  // 水平偏移百分比
-            const yOffset = -row * (100 / ROWS);  // 垂直偏移百分比
+            const xOffset = -col * (100 / COLS);
+            const yOffset = -row * (100 / ROWS);
             
-            // 设置图片尺寸（根据行列数放大）
             pieceImg.style.width = `${COLS * 100}%`;
             pieceImg.style.height = `${ROWS * 100}%`;
             pieceImg.style.transform = `translate(${xOffset}%, ${yOffset}%)`;
-            pieceImg.style.objectFit = "cover";
 
-            // 3.4 组装碎片
             piece.appendChild(pieceImg);
             puzzlePieces.push({
                 element: piece,
@@ -587,12 +590,10 @@ function initGame2() {
             const piece = puzzleObj.element;
             piece.addEventListener("click", () => {
                 if (!selectedPiece) {
-                    // 第一次点击：选中
                     selectedPiece = puzzleObj;
                     piece.style.opacity = "0.7";
                     piece.style.border = "3px solid #ff4757";
                 } else {
-                    // 第二次点击：交换
                     const piece1 = selectedPiece.element;
                     const piece2 = puzzleObj.element;
                     const parent = puzzleGrid;
@@ -600,23 +601,19 @@ function initGame2() {
                     const tempPos1 = piece1.dataset.currentPos;
                     const tempPos2 = piece2.dataset.currentPos;
 
-                    // 交换DOM位置
                     const tempDiv = document.createElement("div");
                     parent.insertBefore(tempDiv, piece1);
                     parent.insertBefore(piece1, piece2);
                     parent.insertBefore(piece2, tempDiv);
                     tempDiv.remove();
 
-                    // 更新位置信息
                     piece1.dataset.currentPos = tempPos2;
                     piece2.dataset.currentPos = tempPos1;
 
-                    // 重置选中状态
                     piece1.style.opacity = "1";
-                    piece1.style.border = "1px solid rgba(255, 107, 139, 0.3)";
+                    piece1.style.border = "2px solid rgba(255, 107, 139, 0.4)";
                     selectedPiece = null;
 
-                    // 6. 检查拼图正确性
                     checkPuzzleCorrect();
                 }
             });
@@ -634,50 +631,36 @@ function initGame2() {
                     correctPieces++;
                     piece.style.border = "2px solid #ff6b8b";
                 } else {
-                    piece.style.border = "1px solid rgba(255, 107, 139, 0.3)";
+                    piece.style.border = "2px solid rgba(255, 107, 139, 0.4)";
                 }
             });
 
-            // 全部拼对 → 通关
             if (correctPieces === TOTAL_PIECES) {
                 setTimeout(() => {
-                    let message = "";
-                    if (TOTAL_PIECES === 9) {
-                        message = "9宫格拼图完美完成！🎉";
-                    } else if (TOTAL_PIECES === 16) {
-                        message = "16宫格拼图完美完成！🎉（高级难度）";
-                    } else if (TOTAL_PIECES === 25) {
-                        message = "25宫格拼图完美完成！🎉（专家难度）";
-                    } else {
-                        message = `${TOTAL_PIECES}块拼图完美完成！🎉`;
-                    }
-                    alert(message);
+                    alert("拼图完成！🎉");
                     showTransition(2);
                 }, 1000);
             }
         }
     };
 
-    // 图片加载失败处理
     img.onerror = function() {
         alert(`❌ 拼图图片加载失败！
-请检查：
-1. 图片路径：${puzzleSrc}
-2. 图片是否存在
-3. 文件夹路径是否正确`);
+请检查图片路径：${puzzleSrc}`);
     };
 }
-// 游戏3：请重新攻略我（恋爱视觉小说）【核心修改：好感度+支线+唯一结局】
+
+// 游戏3：请重新攻略我（恋爱视觉小说）
 function initGame3() {
     const novelAvatar = document.getElementById("novelAvatar");
     const novelDialogue = document.getElementById("novelDialogue");
     const novelOptions = document.getElementById("novelOptions");
-    const affectionEl = document.getElementById("correctAnswers"); // 复用DOM，显示好感度
-    let currentNodeId = "start"; // 当前剧情节点ID
-    let currentAffection = 0; // 当前好感度
-    const targetAffection = CONFIG.affectionTarget; // 通关所需好感度
+    const affectionEl = document.getElementById("correctAnswers");
+    let currentNodeId = "start";
+    let currentAffection = 0;
+    const targetAffection = CONFIG.affectionTarget;
 
-    // 【新手核心修改区：剧情节点配置（支持支线、好感度增减、唯一结局）】
+    // 剧情节点配置
     const storyNodes = [
         // 初始节点
         {
@@ -715,7 +698,7 @@ function initGame3() {
                 { text: "你们这群出生，FK#**#*#***", affectionChange: -10, nextNodeId: "node21" }
             ]
         },
-        //支线21：骂完走了
+        // 支线21：骂完走了
         {
             id: "node21",
             avatar: "assets/characters/boy_avatar.png",
@@ -726,7 +709,7 @@ function initGame3() {
                 { text: "一群cs！！！", affectionChange: -10, nextNodeId: "node114514" }
             ]
         },
-        //支线21：骂完走了
+        // 支线114514：失败结局
         {
             id: "node114514",
             avatar: "assets/characters/boy_avatar.png",
@@ -735,7 +718,7 @@ function initGame3() {
                 { text: "不是姐们你真敢选啊？滚回去重玩", affectionChange: +15, nextNodeId: "start" }
             ]
         },
-        //支线11：跟了我，我喜欢上她了
+        // 支线11：跟了我，我喜欢上她了
         {
             id: "node11",
             avatar: "assets/characters/boy_avatar.png",
@@ -747,7 +730,7 @@ function initGame3() {
                 { text: "都不加，只是陌生人而已", affectionChange: -20, nextNodeId: "node114514" }
             ]
         },
-        //支线12：没跟我，再玩一把，什么时候选对了什么时候出来
+        // 支线12：没跟我，再玩一把
         {
             id: "node12",
             avatar: "assets/characters/boy_avatar.png",
@@ -759,30 +742,7 @@ function initGame3() {
                 { text: "我还有事，先跑了", affectionChange: -5, nextNodeId: "node21" }
             ]
         },
-        //支线122：
-        {
-            id: "node122",
-            avatar: "assets/characters/boy_avatar.png",
-            dialogue: "你退了房间，但心中莫名空落，又连忙求邀请让国潮拉你进房间",
-            options: [
-                { text: "那个...我还可以加入国潮团队吗？", affectionChange: +2, nextNodeId: "node1221" },
-                { text: "把我的分吐回来！带我上回来", affectionChange: +1, nextNodeId: "node1221" }
-            ]
-        },
-        //支线1221：
-        {
-            id: "node1221",
-            avatar: "assets/characters/boy_avatar.png",
-            dialogue: "这把应该怎么玩呢？",
-            options: [
-                { text: "玩瑶跟着射手", affectionChange: -10, nextNodeId: "node12" },
-                { text: "玩贝利亚，偶尔凑巧给司空震刷大", affectionChange: +20, nextNodeId: "node11" },
-                { text: "玩蔡文姬看到谁上就追着奶", affectionChange: +25, nextNodeId: "node11" },
-                { text: "玩小乔在中路逛街", affectionChange: +1, nextNodeId: "node12" }
-            ]
-        },
-
-        
+        // 支线111
         {
             id: "node111",
             avatar: "assets/characters/boy_avatar.png",
@@ -792,6 +752,7 @@ function initGame3() {
                 { text: "可以呀，送送送", affectionChange: +8, nextNodeId: "node3" }
             ]
         },
+        // 支线112
         {
             id: "node112",
             avatar: "assets/characters/boy_avatar.png",
@@ -801,16 +762,17 @@ function initGame3() {
                 { text: "送送送必须送，记得给我留位置", affectionChange: +15, nextNodeId: "node3" }
             ]
         },
+        // 支线113
         {
             id: "node113",
-            avatar: "assets/characters/boy_avatar.png",
+            avatar: "assets/characters/error_avatar.png",
             dialogue: "明天还来不来送外卖（前面不同选项这句话的说的人不一样噢）",
             options: [
                 { text: "送送送，必须送", affectionChange: -5, nextNodeId: "node1111" },
                 { text: "好呀好呀，来送来送", affectionChange: -10, nextNodeId: "node1111" }
             ]
         },
-        //问你为什么不加我
+        // 支线1111：问你为什么不加我
         {
             id: "node1111",
             avatar: "assets/characters/boy_avatar.png",
@@ -820,6 +782,7 @@ function initGame3() {
                 { text: "我为啥加你呀？和你很熟吗？", affectionChange: -15, nextNodeId: "node114514" }
             ]
         },
+        // 支线3
         {
             id: "node3",
             avatar: "assets/characters/boy_avatar.png",
@@ -829,7 +792,7 @@ function initGame3() {
                 { text: "好呀好呀，玩那个新模式吗，2V2的，我昨天和我诡秘输了一晚上！你能带我赢吗", affectionChange: +15, nextNodeId: "node31" }
             ]
         },
-        
+        // 支线31
         {
             id: "node31",
             avatar: "assets/characters/boy_avatar.png",
@@ -839,6 +802,7 @@ function initGame3() {
                 { text: "不打了吧。（转头自己开排位，你当初就这样）", affectionChange: -10, nextNodeId: "node311" }
             ]
         },
+        // 支线312
         {
             id: "node312",
             avatar: "assets/characters/boy_avatar.png",
@@ -849,6 +813,7 @@ function initGame3() {
                 { text: "好呀好呀，带我飞带我飞", affectionChange: +5, nextNodeId: "node3121" }
             ]
         },
+        // 支线3121
         {
             id: "node3121",
             avatar: "assets/characters/boy_avatar.png",
@@ -858,6 +823,7 @@ function initGame3() {
                 { text: "他竟然偷偷研究这个为了带我飞，好感动呀", affectionChange: +5, nextNodeId: "node4" }
             ]
         },
+        // 支线3122
         {
             id: "node3122",
             avatar: "assets/characters/boy_avatar.png",
@@ -866,6 +832,7 @@ function initGame3() {
                 { text: "他竟然偷偷研究这个为了带我飞，好感动呀，那还是玩吧", affectionChange: +1, nextNodeId: "node4" }
             ]
         },
+        // 支线311
         {
             id: "node311",
             avatar: "assets/characters/boy_avatar.png",
@@ -876,6 +843,7 @@ function initGame3() {
                 { text: "何意味？和我说这个干嘛", affectionChange: -10, nextNodeId: "node3112" },
             ]
         },
+        // 支线3111
         {
             id: "node3111",
             avatar: "assets/characters/boy_avatar.png",
@@ -886,15 +854,17 @@ function initGame3() {
                 { text: "好，等我噢快结束了", affectionChange: +6, nextNodeId: "node4" }
             ]
         },
+        // 支线3112
         {
             id: "node3112",
             avatar: "assets/characters/boy_avatar.png",
             dialogue: "结果排位输了之后出来发现他还在打2V2",
             options: [
                 { text: "我刚刚回复得是不是太过分了，要不预约一下他吧", affectionChange: +10, nextNodeId: "node4" },
-                { text: "这么喜欢玩2V2，果然不是好东西喜欢带妹（不太开心地下机了）", affectionChange: -5, nextNodeId: "node5" }
+                { text: "这么喜欢玩2V2，果然不是好东西，喜欢带妹（不太开心地下机了）", affectionChange: -5, nextNodeId: "node5" }
             ]
         },
+        // 支线5
         {
             id: "node5",
             avatar: "assets/characters/boy_avatar.png",
@@ -904,6 +874,7 @@ function initGame3() {
                 { text: "以后可能就是路人了吧，你想", affectionChange: -5, nextNodeId: "node51" }
             ]
         },
+        // 支线51
         {
             id: "node51",
             avatar: "assets/characters/boy_avatar.png",
@@ -913,6 +884,7 @@ function initGame3() {
                 { text: "那个，待会，一起打2V2吗？这个模式今天要关了...", affectionChange: +12, nextNodeId: "node511" }
             ]
         },
+        // 支线511
         {
             id: "node511",
             avatar: "assets/characters/boy_avatar.png",
@@ -923,6 +895,7 @@ function initGame3() {
                 { text: "好久啊，我自己开把排位吧，待会让他出来等我（以前的你百分百这么干，呵呵）", affectionChange: -15, nextNodeId: "node114514" }
             ]
         },
+        // 支线5111
         {
             id: "node5111",
             avatar: "assets/characters/boy_avatar.png",
@@ -932,6 +905,7 @@ function initGame3() {
                 { text: "切，装货，见色忘友的家伙，对兄弟都这样那对女朋友呢", affectionChange: +1, nextNodeId: "node6" }
             ]
         },
+        // 支线5112
         {
             id: "node5112",
             avatar: "assets/characters/boy_avatar.png",
@@ -939,73 +913,93 @@ function initGame3() {
             options: [
                 { text: "等他出来夸他好厉害", affectionChange: +12, nextNodeId: "node6" },
                 { text: "老夫子丑死了，怎么爱玩这鸟英雄，还是镜澜帅", affectionChange: -5, nextNodeId: "node6" },
-                { text: "继续保持高冷女神风格，只言片语", affectionChange: +1, nextNodeId: "node6" }
+                { text: "继续保持高冷女神风格，只言片语", affectionChange: +1, nextNodeId: "node6" },
+                { text: "好装逼啊玩的", affectionChange: -1, nextNodeId: "node6" }
             ]
         },
+        
         {
             id: "node4",
             avatar: "assets/characters/boy_avatar.png",
-            dialogue: "终于，2V2出现了一对闻风丧胆的中辅，他们",
+            dialogue: "终于，你俩又开始了2V2的奋战，请选择你想要玩的英雄",
             options: [
-                { text: "等他出来夸他好厉害", affectionChange: +12, nextNodeId: "node6" },
-                { text: "老夫子丑死了，怎么爱玩这鸟英雄，还是镜澜帅", affectionChange: -5, nextNodeId: "node6" },
-                { text: "继续保持高冷女神风格，只言片语", affectionChange: +1, nextNodeId: "node6" }
+                { text: "沙琪玛沙琪玛沙琪玛", affectionChange: +10, nextNodeId: "node41" },
+                { text: "玩小乔吧，怕他压力太大", affectionChange: +10, nextNodeId: "node41" },
+                { text: "玩最擅长的瑶", affectionChange: +5, nextNodeId: "node41" },
+                { text: "纠结选什么英雄导致超时随机了", affectionChange: +1, nextNodeId: "node41" }
             ]
         },
-        // 最终结局节点（唯一）
+        // 支线6
+        {
+            id: "node6",
+            avatar: "assets/characters/boy_avatar.png",
+            dialogue: "他打完了，你选择",
+            options: [
+                { text: "先开好房，邀请他进房间", affectionChange: +1, nextNodeId: "node4" },
+                { text: "在外面继续等待，等他开房拉自己", affectionChange: +1, nextNodeId: "node4" },
+                { text: "刷一会抖音，让他干着急", affectionChange: -5, nextNodeId: "node4" },
+                { text: "主动私聊他问打赢了没有", affectionChange: +5, nextNodeId: "node4" }
+            ]
+        },
+        {
+            id: "node41",
+            avatar: "assets/characters/boy_avatar.png",
+            dialogue: "终于，2V2出现了一对中辅，靠一手超绝恶心人的姜子牙沙琪玛组合令人闻风丧胆",
+            options: [
+                { text: "哇你没骗我，真的赢了耶，好厉害", affectionChange: +10, nextNodeId: "node61" },
+                { text: "哇姜子牙好厉害", affectionChange: +1, nextNodeId: "node61" },
+                { text: "哈哈哈你好厉害", affectionChange: +5, nextNodeId: "node61" },
+                { text: "嘿嘿和你玩好有意思", affectionChange: +15, nextNodeId: "node61" }
+            ]
+        },
+        // 最终结局节点
         {
             id: "end",
             avatar: "assets/characters/boy_avatar.png",
             dialogue: "你好，往后余生，请多指教❤️",
-            options: [] // 结局无选项，触发好感度判断
+            options: []
         }
     ];
 
     // 重置数据
     currentNodeId = "start";
     currentAffection = 0;
-    affectionEl.textContent = `${currentAffection}/${targetAffection}`; // 好感度显示格式
+    affectionEl.textContent = `${currentAffection}/${targetAffection}`;
     renderCurrentNode();
 
-    // 渲染当前剧情节点（核心函数）
+    // 渲染当前剧情节点
     function renderCurrentNode() {
-        // 查找当前节点数据
         const currentNode = storyNodes.find(node => node.id === currentNodeId);
         if (!currentNode) return;
 
-        // 更新头像和对话
         novelAvatar.src = currentNode.avatar;
         novelDialogue.textContent = currentNode.dialogue;
         novelOptions.innerHTML = "";
 
-        // 处理结局节点（无选项，触发好感度判断）
+        // 处理结局节点
         if (currentNode.id === "end") {
             setTimeout(() => {
                 if (currentAffection >= targetAffection) {
                     alert(`🎉 好感度达标！(${currentAffection}/${targetAffection})\n谢谢你陪我走完这段回忆，我们要一直相爱哦～`);
-                    showTransition(3); // 通关解锁惊喜3
+                    showTransition(3);
                 } else {
                     alert(`😢 好感度不够哦～(${currentAffection}/${targetAffection})\n再重新攻略我一次吧，我等你～`);
-                    initGame3(); // 重置游戏重新开始
+                    initGame3();
                 }
-            }, 2000); // 延迟2秒，给对方看完文案
+            }, 2000);
             return;
         }
 
-        // 生成当前节点的选项按钮
+        // 生成选项按钮
         currentNode.options.forEach((option) => {
             const btn = document.createElement("button");
             btn.classList.add("option-btn");
             btn.textContent = option.text;
             btn.addEventListener("click", () => {
-                // 1. 更新好感度（防止负数）
                 currentAffection += option.affectionChange;
                 currentAffection = Math.max(0, currentAffection);
-                // 2. 更新好感度显示
                 affectionEl.textContent = `${currentAffection}/${targetAffection}`;
-                // 3. 跳转到下一个节点
                 currentNodeId = option.nextNodeId;
-                // 4. 渲染下一个节点
                 renderCurrentNode();
             });
             novelOptions.appendChild(btn);
@@ -1018,15 +1012,13 @@ function initGame3() {
 function changeAlbum(direction) {
     currentAlbumIndex += direction;
 
-    // 限制索引范围
     if (currentAlbumIndex < 1) currentAlbumIndex = CONFIG.albumCount;
     if (currentAlbumIndex > CONFIG.albumCount) currentAlbumIndex = 1;
 
-    // 更新相册图片
     document.getElementById("albumImg").src = `assets/surprise/album/album_${currentAlbumIndex}.jpg`;
 }
 
-// 工具函数：数组打乱（去重，仅保留一个）
+// 工具函数：数组打乱
 function shuffleArray(array) {
     const newArray = [...array];
     for (let i = newArray.length - 1; i > 0; i--) {
@@ -1042,7 +1034,6 @@ window.onload = function() {
     initElements();
     updateMainPage();
 
-    // 如果已经完成开场，直接显示主页面
     const status = getStorageStatus();
     if (status.isIntroDone) {
         introPage.classList.remove("active");
