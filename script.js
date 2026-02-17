@@ -968,7 +968,7 @@ function initGame3() {
             dialogue: "意犹未尽地打开了抖音，你发现你新增了一个关注",
             options: [
                 { text: "什么鬼，这是谁，还是个奥特曼头像", affectionChange: -10, nextNodeId: "node511" },
-                { text: "最好拉黑他，可能是骗子", affectionChange: +1, nextNodeId: "node511" },
+                { text: "一串英文，乱七八糟的，最好拉黑他，可能是骗子", affectionChange: +1, nextNodeId: "node511" },
                 { text: "难道是他吗，立刻回关", affectionChange: +15, nextNodeId: "node511" },
                 { text: "哇塞竟然有人关注我，我要去和他聊天", affectionChange: -100, nextNodeId: "node511" }
             ]
@@ -987,23 +987,64 @@ function initGame3() {
         {
             id: "node5111",
             avatar: "assets/characters/boy_avatar.png",
-            dialogue: "perkingfly：[表情]你好",
+            dialogue: "我是姜子牙大王",
             options: [
-                { text: "你是？", affectionChange: +3, nextNodeId: "node511" },
-                { text: "是国潮吗？", affectionChange: +2, nextNodeId: "node511" },
-                { text: "好鸡掰，你谁啊？", affectionChange: +10, nextNodeId: "node511" },
-                { text: "你好，你是？", affectionChange: +1, nextNodeId: "node511" }
+                { text: "那很老了", affectionChange: +3, nextNodeId: "node5112" },
+                { text: "哇塞是你", affectionChange: +2, nextNodeId: "node5112" },
+                { text: "你怎么偷偷关注我，变态吧", affectionChange: -5, nextNodeId: "node5112" },
+                { text: "那我是贝利亚大王", affectionChange: +10, nextNodeId: "node5112" }
             ]
         },
         {
             id: "node5112",
             avatar: "assets/characters/boy_avatar.png",
-            dialogue: "嗯，我看你王者主页是鲁鲁修就加你惹，你看过鲁鲁修吗？",
+            dialogue: "嘿嘿，我看你王者主页是鲁鲁修就加你惹，你看过鲁鲁修吗？",
             options: [
-                { text: "啊~没看过，只是看到别人发的很有意思...", affectionChange: +1, nextNodeId: "node511" },
-                { text: "是国潮吗？", affectionChange: +2, nextNodeId: "node511" },
-                { text: "好鸡掰，你谁啊？", affectionChange: +10, nextNodeId: "node511" },
-                { text: "你好，你是？", affectionChange: +1, nextNodeId: "node511" }
+                { text: "啊~没看过，只是看到别人发的很有意思...", affectionChange: +5, nextNodeId: "node7" },
+                { text: "没", affectionChange: -15, nextNodeId: "node7" },
+                { text: "emmmm，想看但一直没去看", affectionChange: +5, nextNodeId: "node7" },
+                { text: "怎么了，你看过吗？", affectionChange: -1, nextNodeId: "node7" }
+            ]
+        },
+        {
+            id: "node7",
+            avatar: "assets/characters/boy_avatar.png",
+            dialogue: "你们开始了聊天，一开始，你们只是偶尔零星的转发",
+            options: [
+                { text: "分享一个自己很喜欢的情侣博主的视频", affectionChange: +8, nextNodeId: "node71" },
+                { text: "分享一个玩大学生梗的搞笑视频", affectionChange: +5, nextNodeId: "node71" },
+                { text: "分享一个抽象视频", affectionChange: +3, nextNodeId: "node71" },
+                { text: "不分享，只是看对方转发的视频，毕竟你们并不太熟", affectionChange: +1, nextNodeId: "node72" }
+            ]
+        },
+        {
+            id: "node71",
+            avatar: "assets/characters/boy_avatar.png",
+            dialogue: "对方似乎是认真看了并点赞了视频，并且回复也是围绕视频的内容展开",
+            options: [
+                { text: "哇他好认真看我分享的视频欸，难道可以安利他看吗", affectionChange: +2, nextNodeId: "node8" },
+                { text: "跟他继续聊天，接下他的回复，并继续转发其他视频", affectionChange: +2, nextNodeId: "node8" }
+            ]
+        },
+        {
+            id: "node72",
+            avatar: "assets/characters/boy_avatar.png",
+            dialogue: "渐渐的，你们逐渐没有了话题，场面也冷了下来，各自刷各自的了",
+            options: [
+                { text: "你继续无聊地刷抖音", affectionChange: +1, nextNodeId: "node721" },
+                { text: "突然刷到了perkingfly的视频", affectionChange: +1, nextNodeId: "node721" },
+                { text: "你点开了他的主页，发现他发了好几个视频", affectionChange: +1, nextNodeId: "node721" },
+                { text: "有奥特曼的，也有一些其他的", affectionChange: +1, nextNodeId: "node721" }
+            ]
+        },
+        {
+            id: "node721",
+            avatar: "assets/characters/boy_avatar.png",
+            dialogue: "你偷偷地点了个小赞，在他的王者五杀视频下面评论了个牛逼，然后继续刷抖音了",
+            options: [
+                { text: "不知怎么的，你突然刷到了一个奥特曼的抽象视频", affectionChange: +1, nextNodeId: "node7211" },
+                { text: "看他好像很喜欢奥特曼的", affectionChange: +1, nextNodeId: "node7211" },
+                { text: "把这个转发给他怎么样", affectionChange: +1, nextNodeId: "node7211" }
             ]
         },
         // 最终结局节点
