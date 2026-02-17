@@ -671,7 +671,7 @@ function initGame3() {
                 { text: "嗯~行，来一把", affectionChange: +5, nextNodeId: "node1" },
                 { text: "你的搭讪就这水平？滚", affectionChange: -5, nextNodeId: "node2" },
                 { text: "吃你的国潮去，有病去治", affectionChange: -15, nextNodeId: "node2" },
-                { text: "请问我在团队担当什么职位呀，欧尼酱", affectionChange: +15, nextNodeId: "node1" }
+                { text: "请问我在团队担当什么职位呀，欧尼酱", affectionChange: +10, nextNodeId: "node1" }
             ]
         },
         // 支线1：加入车队
@@ -681,8 +681,8 @@ function initGame3() {
             dialogue: "刚进车队第一把怎么玩好呢？",
             options: [
                 { text: "玩瑶跟着射手", affectionChange: -10, nextNodeId: "node12" },
-                { text: "玩贝利亚，偶尔凑巧给司空震刷大", affectionChange: +20, nextNodeId: "node11" },
-                { text: "玩蔡文姬看到谁上就追着奶", affectionChange: +25, nextNodeId: "node11" },
+                { text: "玩贝利亚，偶尔凑巧给司空震刷大", affectionChange: +10, nextNodeId: "node11" },
+                { text: "玩蔡文姬看到谁上就追着奶", affectionChange: +15, nextNodeId: "node11" },
                 { text: "玩小乔在中路逛街", affectionChange: +1, nextNodeId: "node12" }
             ]
         },
@@ -725,8 +725,8 @@ function initGame3() {
             dialogue: "开了一把赢了，有两个国潮加你好友，是否同意",
             options: [
                 { text: "随便同意一个吧，另一个没注意到没加", affectionChange: -10, nextNodeId: "node113" },
-                { text: "来者不拒全加了，真有趣", affectionChange: +10, nextNodeId: "node111" },
-                { text: "只加了玩司空震的那个", affectionChange: +20, nextNodeId: "node112" },
+                { text: "来者不拒全加了，真有趣", affectionChange: +5, nextNodeId: "node111" },
+                { text: "只加了玩司空震的那个", affectionChange: +11, nextNodeId: "node112" },
                 { text: "都不加，只是陌生人而已", affectionChange: -20, nextNodeId: "node114514" }
             ]
         },
@@ -737,8 +737,8 @@ function initGame3() {
             dialogue: "上把输了，应该怎么办",
             options: [
                 { text: "靠，太菜了这国潮仔，跳车跑路", affectionChange: -15, nextNodeId: "node21" },
-                { text: "对不起我坑你们了，还玩吗(●'◡'●)", affectionChange: +20, nextNodeId: "node11" },
-                { text: "不是，能不能别演我，再来一把", affectionChange: +11, nextNodeId: "node11" },
+                { text: "对不起我坑你们了，还玩吗(●'◡'●)", affectionChange: +10, nextNodeId: "node11" },
+                { text: "不是，能不能别演我，再来一把", affectionChange: +5, nextNodeId: "node11" },
                 { text: "我还有事，先跑了", affectionChange: -5, nextNodeId: "node21" }
             ]
         },
@@ -788,7 +788,7 @@ function initGame3() {
             avatar: "assets/characters/boy_avatar.png",
             dialogue: "呀，其他国潮都不在，可以我们俩一起玩吗？",
             options: [
-                { text: "哎呀，我还有事，先不玩了。", affectionChange: -15, nextNodeId: "node5" },
+                { text: "哎呀，我还有事，先不玩了。", affectionChange: -15, nextNodeId: "node9" },
                 { text: "好呀好呀，玩那个新模式吗，2V2的，我昨天和我诡秘输了一晚上！你能带我赢吗", affectionChange: +15, nextNodeId: "node31" }
             ]
         },
@@ -820,7 +820,7 @@ function initGame3() {
             dialogue: "他说：我跟你说我昨天晚上研究了，姜子牙这个模式巨强。于是你偷偷打开主页，发现他玩了好多种英雄，直到玩了姜子牙连胜了",
             options: [
                 { text: "他竟然偷偷和这么多人打2V2！！！吃醋了！！！", affectionChange: +1, nextNodeId: "node4" },
-                { text: "他竟然偷偷研究这个为了带我飞，好感动呀", affectionChange: +5, nextNodeId: "node4" }
+                { text: "他竟然偷偷研究这个为了带我飞，好感动呀", affectionChange: +4, nextNodeId: "node4" }
             ]
         },
         // 支线3122
@@ -839,7 +839,7 @@ function initGame3() {
             dialogue: "自己开排位结果打着打着被发消息了-你还玩吗？我发现姜子牙好恶心打那个22",
             options: [
                 { text: "哎呀，你又开了呀", affectionChange: +1, nextNodeId: "node3111" },
-                { text: "哇，那你要让我见识一下吗？", affectionChange: +10, nextNodeId: "node3111" },
+                { text: "哇，那你要让我见识一下吗？", affectionChange: +8, nextNodeId: "node3111" },
                 { text: "何意味？和我说这个干嘛", affectionChange: -10, nextNodeId: "node3112" },
             ]
         },
@@ -861,43 +861,43 @@ function initGame3() {
             dialogue: "结果排位输了之后出来发现他还在打2V2",
             options: [
                 { text: "我刚刚回复得是不是太过分了，要不预约一下他吧", affectionChange: +10, nextNodeId: "node4" },
-                { text: "这么喜欢玩2V2，果然不是好东西，喜欢带妹（不太开心地下机了）", affectionChange: -5, nextNodeId: "node5" }
+                { text: "这么喜欢玩2V2，果然不是好东西，喜欢带妹（不太开心地下机了）", affectionChange: -5, nextNodeId: "node9" }
             ]
         },
         // 支线5
         {
-            id: "node5",
+            id: "node9",
             avatar: "assets/characters/boy_avatar.png",
             dialogue: "之后，有相当一段时间，国潮都没有再拉你了",
             options: [
-                { text: "你看着他每天都在五排，但都不曾拉你，有点难过", affectionChange: +1, nextNodeId: "node51" },
-                { text: "以后可能就是路人了吧，你想", affectionChange: -5, nextNodeId: "node51" }
+                { text: "你看着他每天都在五排，但都不曾拉你，有点难过", affectionChange: +1, nextNodeId: "node91" },
+                { text: "以后可能就是路人了吧，你想", affectionChange: -5, nextNodeId: "node91" }
             ]
         },
         // 支线51
         {
-            id: "node51",
+            id: "node91",
             avatar: "assets/characters/boy_avatar.png",
             dialogue: "可是我有点想和他玩欸，他好有意思",
             options: [
-                { text: "你做出了一个重大决定，预约了神也想吃国潮", affectionChange: +12, nextNodeId: "node511" },
-                { text: "那个，待会，一起打2V2吗？这个模式今天要关了...", affectionChange: +12, nextNodeId: "node511" }
+                { text: "你做出了一个重大决定，预约了神也想吃国潮", affectionChange: +11, nextNodeId: "node911" },
+                { text: "那个，待会，一起打2V2吗？这个模式今天要关了...", affectionChange: +12, nextNodeId: "node911" }
             ]
         },
         // 支线511
         {
-            id: "node511",
+            id: "node911",
             avatar: "assets/characters/boy_avatar.png",
             dialogue: "嗯，好，等我打完这把就来",
             options: [
-                { text: "没事没事，我等你和他们打完也可以的", affectionChange: +12, nextNodeId: "node5111" },
-                { text: "好~等你哟（偷偷观战）", affectionChange: +12, nextNodeId: "node5112" },
+                { text: "没事没事，我等你和他们打完也可以的", affectionChange: +10, nextNodeId: "node9111" },
+                { text: "好~等你哟（偷偷观战）", affectionChange: +12, nextNodeId: "node9112" },
                 { text: "好久啊，我自己开把排位吧，待会让他出来等我（以前的你百分百这么干，呵呵）", affectionChange: -15, nextNodeId: "node114514" }
             ]
         },
         // 支线5111
         {
-            id: "node5111",
+            id: "node9111",
             avatar: "assets/characters/boy_avatar.png",
             dialogue: "神也想吃国潮如约而至，直接跳下五人车队",
             options: [
@@ -907,7 +907,7 @@ function initGame3() {
         },
         // 支线5112
         {
-            id: "node5112",
+            id: "node9112",
             avatar: "assets/characters/boy_avatar.png",
             dialogue: "神也想吃国潮玩老夫子在高地越了七八个",
             options: [
@@ -923,8 +923,8 @@ function initGame3() {
             avatar: "assets/characters/boy_avatar.png",
             dialogue: "终于，你俩又开始了2V2的奋战，请选择你想要玩的英雄",
             options: [
-                { text: "沙琪玛沙琪玛沙琪玛", affectionChange: +10, nextNodeId: "node41" },
-                { text: "蔡文姬蔡文姬蔡文姬", affectionChange: +10, nextNodeId: "node41" },
+                { text: "沙琪玛沙琪玛沙琪玛", affectionChange: +8, nextNodeId: "node41" },
+                { text: "蔡文姬蔡文姬蔡文姬", affectionChange: +8, nextNodeId: "node41" },
                 { text: "玩最擅长的瑶", affectionChange: +5, nextNodeId: "node41" },
                 { text: "纠结选什么英雄导致超时随机了", affectionChange: +1, nextNodeId: "node41" }
             ]
@@ -946,10 +946,10 @@ function initGame3() {
             avatar: "assets/characters/boy_avatar.png",
             dialogue: "终于，2V2出现了一对中辅大杀四方，姜子牙极其之恶心，辅助也很可爱",
             options: [
-                { text: "哇你没骗我，真的赢了耶，好厉害", affectionChange: +10, nextNodeId: "node5" },
+                { text: "哇你没骗我，真的赢了耶，好厉害", affectionChange: +8, nextNodeId: "node5" },
                 { text: "哇姜子牙好厉害", affectionChange: +1, nextNodeId: "node5" },
                 { text: "哈哈哈你好厉害", affectionChange: +5, nextNodeId: "node5" },
-                { text: "嘿嘿和你玩好有意思", affectionChange: +15, nextNodeId: "node5" }
+                { text: "嘿嘿和你玩好有意思", affectionChange: +10, nextNodeId: "node5" }
             ]
         },
         {
@@ -957,9 +957,9 @@ function initGame3() {
             avatar: "assets/characters/boy_avatar.png",
             dialogue: "呼，爽玩了一晚上，到了说再见的时候",
             options: [
-                { text: "拜拜，明天继续送外卖", affectionChange: +10, nextNodeId: "node5" },
-                { text: "等对方先说拜拜", affectionChange: +1, nextNodeId: "node5" },
-                { text: "啊？要下线了吗，我还没玩够怎么办", affectionChange: +15, nextNodeId: "node5" }
+                { text: "拜拜，明天继续送外卖", affectionChange: +10, nextNodeId: "node51" },
+                { text: "等对方先说拜拜", affectionChange: +1, nextNodeId: "node51" },
+                { text: "啊？要下线了吗，我还没玩够怎么办", affectionChange: +15, nextNodeId: "node51" }
             ]
         },
         {
@@ -1000,10 +1000,31 @@ function initGame3() {
             avatar: "assets/characters/boy_avatar.png",
             dialogue: "嘿嘿，我看你王者主页是鲁鲁修就加你惹，你看过鲁鲁修吗？",
             options: [
-                { text: "啊~没看过，只是看到别人发的很有意思...", affectionChange: +5, nextNodeId: "node7" },
-                { text: "没", affectionChange: -15, nextNodeId: "node7" },
-                { text: "emmmm，想看但一直没去看", affectionChange: +5, nextNodeId: "node7" },
-                { text: "怎么了，你看过吗？", affectionChange: -1, nextNodeId: "node7" }
+                { text: "啊~没看过，只是看到别人发的很有意思...", affectionChange: +5, nextNodeId: "node51121" },
+                { text: "没", affectionChange: -15, nextNodeId: "node51121" },
+                { text: "emmmm，想看但一直没去看", affectionChange: +5, nextNodeId: "node51121" },
+                { text: "怎么了，你看过吗？", affectionChange: -1, nextNodeId: "node51122" }
+            ]
+        },
+        {
+            id: "node51121",
+            avatar: "assets/characters/boy_avatar.png",
+            dialogue: "哦~这样啊，有机会可以尝试一下，我看过嘿嘿",
+            options: [
+                { text: "噢？是什么类型的呀？", affectionChange: +5, nextNodeId: "node7" },
+                { text: "好呀好呀", affectionChange: -10, nextNodeId: "node7" },
+                { text: "嗯好，主要是我不怎么看动漫", affectionChange: -5, nextNodeId: "node7" },
+                { text: "傻卵二次元吃大粪去吧", affectionChange: -1, nextNodeId: "node114514" }
+            ]
+        },
+        {
+            id: "node51122",
+            avatar: "assets/characters/boy_avatar.png",
+            dialogue: "嗯呢，我蛮喜欢的哈哈",
+            options: [
+                { text: "好吧，可惜我没看过", affectionChange: -5, nextNodeId: "node7" },
+                { text: "这样吗，是讲什么的呀？", affectionChange: +5, nextNodeId: "node7" },
+                { text: "一个表情包", affectionChange: +5, nextNodeId: "node7" }
             ]
         },
         {
@@ -1022,8 +1043,8 @@ function initGame3() {
             avatar: "assets/characters/boy_avatar.png",
             dialogue: "对方似乎是认真看了并点赞了视频，并且回复也是围绕视频的内容展开",
             options: [
-                { text: "哇他好认真看我分享的视频欸，难道可以安利他看吗", affectionChange: +2, nextNodeId: "node8" },
-                { text: "跟他继续聊天，接下他的回复，并继续转发其他视频", affectionChange: +2, nextNodeId: "node8" }
+                { text: "哇他好认真看我分享的视频欸，难道可以安利他看吗", affectionChange: +2, nextNodeId: "node7211" },
+                { text: "跟他继续聊天，接下他的回复，并继续转发其他视频", affectionChange: +2, nextNodeId: "node7211" }
             ]
         },
         {
@@ -1045,6 +1066,133 @@ function initGame3() {
                 { text: "不知怎么的，你突然刷到了一个奥特曼的抽象视频", affectionChange: +1, nextNodeId: "node7211" },
                 { text: "看他好像很喜欢奥特曼的", affectionChange: +1, nextNodeId: "node7211" },
                 { text: "把这个转发给他怎么样", affectionChange: +1, nextNodeId: "node7211" }
+            ]
+        },
+        {
+            id: "node7211",
+            avatar: "assets/characters/boy_avatar.png",
+            dialogue: "似乎对你们的聊天很奏效，对方又开始活跃了，并带动你一起活跃",
+            options: [
+                { text: "你们的聊天话题越来越多", affectionChange: +1, nextNodeId: "node8" },
+                { text: "你们越聊越顺眼", affectionChange: +1, nextNodeId: "node8" },
+                { text: "觉得对方很有意思", affectionChange: +1, nextNodeId: "node8" }
+            ]
+        },
+        {
+            id: "node8",
+            avatar: "assets/characters/boy_avatar.png",
+            dialogue: "渐渐的，你们走得越来越近，经常一起打游戏，还频繁互相转发视频",
+            options: [
+                { text: "开始有了互相的称呼，飞老师，露大王", affectionChange: +1, nextNodeId: "node81" },
+                { text: "这算是搞暧昧吗？", affectionChange: +1, nextNodeId: "node81" },
+                { text: "这种感觉还真不赖？", affectionChange: +1, nextNodeId: "node81" }
+            ]
+        },
+        {
+            id: "node81",
+            avatar: "assets/characters/boy_avatar.png",
+            dialogue: "有一天，你按耐不住，说起了亲密度和王者关系",
+            options: [
+                { text: "飞老师，你的关系好多呀", affectionChange: +1, nextNodeId: "node811" },
+                { text: "原来王者的关系可以绑这么多吗", affectionChange: +1, nextNodeId: "node811" },
+                { text: "我也想绑一个", affectionChange: +1, nextNodeId: "node811" }
+            ]
+        },
+        {
+            id: "node811",
+            avatar: "assets/characters/boy_avatar.png",
+            dialogue: "你不知道的是，手机的另一端，有一个人心跳剧烈加速",
+            options: [
+                { text: "你关系还有空位吗？你进一步逼问", affectionChange: +1, nextNodeId: "node8111" },
+                { text: "沉默等待对方说话", affectionChange: +1, nextNodeId: "node8112" }
+            ]
+        },
+        {
+            id: "node8111",
+            avatar: "assets/characters/boy_avatar.png",
+            dialogue: "我都可以，想要什么我都可以绑定",
+            options: [
+                { text: "我也都可以呀，看飞老师有什么嘛", affectionChange: +1, nextNodeId: "node81122" }
+            ]
+        },
+        {
+            id: "node8112",
+            avatar: "assets/characters/boy_avatar.png",
+            dialogue: "你想要什么关系嘛",
+            options: [
+                { text: "那要看你还有什么位置了呀，你绑了好多嘛~", affectionChange: +1, nextNodeId: "node81122" },
+                { text: "我想要的，我怕你给不起", affectionChange: +1, nextNodeId: "node81122" },
+                { text: "我想要的是你已经有了的关系，这样也可以吗？", affectionChange: +1, nextNodeId: "node81122" },
+            ]
+        },
+        {
+            id: "node81122",
+            avatar: "assets/characters/boy_avatar.png",
+            dialogue: "你想要什么我都给得起！",
+            options: [
+                { text: "真的吗？", affectionChange: +1, nextNodeId: "node811221" },
+                { text: "难道我想要和你绑情侣也可以吗？", affectionChange: +1, nextNodeId: "node811221" }
+            ]
+        },
+        {
+            id: "node811221",
+            avatar: "assets/characters/boy_avatar.png",
+            dialogue: "嗯可以呀",
+            options: [
+                { text: "可是你情侣不是已经绑定了吗？", affectionChange: +1, nextNodeId: "node83" }
+            ]
+        },
+        {
+            id: "node83",
+            avatar: "assets/characters/boy_avatar.png",
+            dialogue: "那个是绑的兄弟的，现在已经没有绑定了",
+            options: [
+                { text: "我靠什么时候解绑了，牛逼啊飞老师", affectionChange: -1, nextNodeId: "node831" },
+                { text: "啊，我前面看还有绑定呀", affectionChange: +5, nextNodeId: "node831" },
+                { text: "该死的，我也得叫姐妹解绑了！", affectionChange: +5, nextNodeId: "node831" }
+            ]
+        },
+        {
+            id: "node831",
+            avatar: "assets/characters/boy_avatar.png",
+            dialogue: "所以，你想要什么关系？",
+            options: [
+                { text: "我，wwwwww，我不知道", affectionChange: -1, nextNodeId: "node84" },
+                { text: "你确定我想要什么你都可以绑吗？", affectionChange: +5, nextNodeId: "node85" }
+            ]
+        },
+        {
+            id: "node84",
+            avatar: "assets/characters/boy_avatar.png",
+            dialogue: "那我来申请可以吗？",
+            options: [
+                { text: "嗯嗯嗯嗯嗯！！！！！可以！！！！", affectionChange: +10, nextNodeId: "node841" },
+            ]
+        },
+        {
+            id: "node841",
+            avatar: "assets/characters/boy_avatar.png",
+            dialogue: "过了一会，你看到了对方发送的申请，以及他的表白",
+            options: [
+                { text: "光速同意！！！", affectionChange: +100, nextNodeId: "end" },
+                { text: "我也好喜欢你！！！！！！！！！！哇！！！！！！！", affectionChange: +100, nextNodeId: "end" }
+            ]
+        },
+        {
+            id: "node85",
+            avatar: "assets/characters/boy_avatar.png",
+            dialogue: "是的，我确定，你尽管申请吧！",
+            options: [
+                { text: "你鼓起勇气，向对方申请了情侣", affectionChange: +10, nextNodeId: "node851" },
+                { text: "你的表白，请自己在QQ输入", affectionChange: +10, nextNodeId: "node851" }
+            ]
+        },
+        {
+            id: "node85",
+            avatar: "assets/characters/boy_avatar.png",
+            dialogue: "这样吗，不瞒你说，其实我也喜欢你很久了！！！！！！！！",
+            options: [
+                { text: "不止是游戏的！我还要和你做人生的伴侣！", affectionChange: +100, nextNodeId: "end" }
             ]
         },
         // 最终结局节点

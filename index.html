@@ -11,7 +11,7 @@
     <audio id="bgm" src="assets/bg/bgm.mp3" loop preload="auto"></audio>
     <button id="bgmSwitch" class="bgm-switch">🎵 背景音：关闭</button>
     <!-- 开发者重置按钮（测试用，给女朋友看时可删除或注释） -->
-    <button id="resetBtn" class="reset-btn">🔧 重置所有进度（测试用）</button>
+    <button id="resetBtn" class="reset-btn"></button>
 
     <!-- 1. 开场亲嘴页面（初始显示，完成后隐藏） -->
     <div id="introPage" class="page active">
@@ -91,10 +91,10 @@
     <div id="surprisePage" class="page">
         <!-- 惊喜1：语音告白（原来惊喜3） -->
         <div id="surprise1" class="surprise-content">
-            <div class="surprise-title">专属语音告白 ❤️</div>
+            <div class="surprise-title">原来是打算念一个小作文的 ❤️</div>
             <audio id="voiceAudio" src="assets/surprise/voice.mp3" controls preload="auto"></audio>
-            <div class="surprise-desc">这是我想对你说的悄悄话～</div>
-            <button id="surprise1Back" class="surprise-back-btn">听完返回游戏列表</button>
+            <div class="surprise-desc">可惜找不到机会去录，算了</div>
+            <button id="surprise1Back" class="surprise-back-btn">告诉你一串神秘字符请记住噢IloveUforever0218</button>
         </div>
 
         <!-- 惊喜2：合照相册 -->
@@ -112,7 +112,7 @@
         <!-- 惊喜3：恋爱日记（原来惊喜1） -->
         <div id="surprise3" class="surprise-content hidden">
             <div class="surprise-title">我的恋爱日记 ❤️</div>
-            <div class="surprise-desc">这是我记录的我们这一年的点点滴滴～</div>
+            <div class="surprise-desc">这是我记录的点点滴滴～</div>
             <a id="diaryLink" href="#" target="_blank" class="surprise-btn big">点击查看恋爱日记</a>
             <button id="surprise3Back" class="surprise-back-btn">看完返回游戏列表</button>
         </div>
@@ -121,7 +121,7 @@
     <!-- 5. 过场动画页面（通关时显示，短暂停留后隐藏） -->
     <div id="transitionPage" class="page transition hidden">
         <div class="transition-title">🎉 通关啦！</div>
-        <div class="transition-desc">解锁了专属惊喜，正在为你跳转～</div>
+        <div class="transition-desc">解锁了专属奖励，正在为你跳转～</div>
     </div>
 
     <script src="script.js"></script>
